@@ -33,8 +33,9 @@
                     <span id="server-ip">spyxhunter.minecraft.pe</span>
                     <span class="copy-hint">Click to copy IP</span>
                 </div>
-                <div class="port-box">
-                    <span>Port: 7101</span>
+                <div class="port-box" onclick="copyPort()">
+                    <span id="server-port">7101</span>
+                    <span class="port-hint">Port</span>
                 </div>
             </div>
             <div class="hero-btns">
@@ -132,6 +133,19 @@
                 hint.style.color = '#4ade80';
                 setTimeout(() => {
                     hint.innerText = 'Click to copy IP';
+                    hint.style.color = 'rgba(255, 255, 255, 0.6)';
+                }, 2000);
+            });
+        }
+
+        function copyPort() {
+            const port = document.getElementById('server-port').innerText;
+            navigator.clipboard.writeText(port).then(() => {
+                const hint = document.querySelector('.port-hint');
+                hint.innerText = 'Copied!';
+                hint.style.color = '#4ade80';
+                setTimeout(() => {
+                    hint.innerText = 'Port';
                     hint.style.color = 'rgba(255, 255, 255, 0.6)';
                 }, 2000);
             });

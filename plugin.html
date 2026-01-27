@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Details - SpyGaming</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-content {
+            background: var(--dark-card);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 2rem;
+            color: var(--text-muted);
+        }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .markdown-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .markdown-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .markdown-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .markdown-content img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .plugin-header-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-user-secret"></i>
+                <span>SPY GAMING</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="plugins.html">Plugins</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="btn-discord"><i class="fab fa-discord"></i> Discord</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="container" style="padding-top: 8rem; padding-bottom: 4rem;">
+        <div id="loading" style="text-align: center;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary-color);"></i>
+            <p style="margin-top: 1rem;">Loading plugin details...</p>
+        </div>
+
+        <div id="plugin-content" style="display: none;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <div id="plugin-icon-large" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></div>
+                <h1 id="plugin-title" style="font-size: 3rem; margin-bottom: 1rem;"></h1>
+                <p id="plugin-desc" style="font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin: 0 auto;"></p>
+                
+                <div class="plugin-header-actions" style="justify-content: center;">
+                    <a id="btn-github" href="#" target="_blank" class="btn-primary" style="background: #333;"><i class="fab fa-github"></i> GitHub</a>
+                    <a id="btn-modrinth" href="#" target="_blank" class="btn-primary" style="background: #1bd96a;"><i class="fas fa-download"></i> Modrinth</a>
+                    <button id="btn-review" class="btn-secondary"><i class="fas fa-comment"></i> Leave Review</button>
+                </div>
+            </div>
+
+            <div id="readme-container" class="markdown-content"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-info">
+                <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-user-secret"></i>
+                    <span>SPY GAMING</span>
+                </a>
+                <p>&copy; 2026 SpyGaming Network. Not affiliated with Mojang AB.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/spygamingog" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://discord.gg/KXCuuSpBzW" target="_blank"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const GITHUB_USERNAME = 'spygamingog';
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function getPluginIcon(repoName) {
+            const icons = {
+                'SpyCore': 'fas fa-layer-group',
+                'SpyBedWars': 'fas fa-bed',
+                'SpyHunts': 'fas fa-crosshairs',
+                'SpyNPCs': 'fas fa-users',
+                'SpySpectator': 'fas fa-eye',
+                'SpyInventories': 'fas fa-boxes',
+                'SpyNetherPortals': 'fas fa-dungeon'
+            };
+            return icons[repoName] || 'fas fa-puzzle-piece';
+        }
+
+        async function loadPlugin() {
+            const repoName = getQueryParam('repo');
+            if (!repoName) {
+                document.getElementById('loading').innerHTML = '<p>No plugin specified.</p>';
+                return;
+            }
+
+            try {
+                // Fetch Repo Details
+                const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`);
+                if (!repoRes.ok) throw new Error('Repository not found');
+                const repo = await repoRes.json();
+
+                // Fetch README
+                const readmeRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`);
+                const readmeData = await readmeRes.json();
+                const readmeContent = atob(readmeData.content);
+
+                // Update UI
+                document.getElementById('plugin-title').innerText = repo.name;
+                document.getElementById('plugin-desc').innerText = repo.description;
+                document.getElementById('plugin-icon-large').innerHTML = `<i class="${getPluginIcon(repo.name)}"></i>`;
+                
+                document.getElementById('btn-github').href = repo.html_url;
+                document.getElementById('btn-modrinth').href = `https://modrinth.com/plugin/${repo.name.toLowerCase()}`;
+                
+                // Render Markdown
+                document.getElementById('readme-container').innerHTML = marked.parse(readmeContent);
+
+                // Show Content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('plugin-content').style.display = 'block';
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').innerHTML = '<p>Error loading plugin details. Please try again later.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPlugin);
+    </script>
+</body>
+</html>
