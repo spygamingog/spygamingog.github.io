@@ -227,6 +227,19 @@
         </div>
     </section>
 
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeReviewModal()">&times;</span>
+            <h2 id="modalPluginName">Plugin Review</h2>
+            <p>We value your feedback! Please join our Discord to leave a review, report bugs, or suggest features.</p>
+            <a href="https://discord.gg/KXCuuSpBzW" class="btn-primary" style="display: inline-block; text-decoration: none; margin-bottom: 1rem;">
+                <i class="fab fa-discord"></i> Join Discord to Review
+            </a>
+            <p style="font-size: 0.8rem;">You can also leave a review on the plugin's Modrinth page.</p>
+        </div>
+    </div>
+
     <footer>
         <div class="container footer-content">
             <div class="footer-info">
@@ -264,6 +277,23 @@
             return icons[repoName] || 'fas fa-puzzle-piece';
         }
 
+        function openReviewModal(pluginName) {
+            document.getElementById('modalPluginName').innerText = pluginName + " Review";
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('reviewModal');
+            if (event.target == modal) {
+                closeReviewModal();
+            }
+        }
+
         async function loadPlugin() {
             const repoName = getQueryParam('repo');
             if (!repoName) {
@@ -290,6 +320,9 @@
                 document.getElementById('btn-github').href = repo.html_url;
                 document.getElementById('btn-modrinth').href = `https://modrinth.com/plugin/${repo.name.toLowerCase()}`;
                 
+                // Set review button listener
+                document.getElementById('btn-review').onclick = () => openReviewModal(repo.name);
+
                 // Update stats
                 document.getElementById('stat-stars').innerText = repo.stargazers_count;
                 document.getElementById('stat-forks').innerText = repo.forks_count;
