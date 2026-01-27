@@ -141,23 +141,24 @@ nav {
     position: relative;
 }
 
-.ip-box:hover {
+.ip-box:hover, .port-box:hover {
     border-color: var(--primary-color);
     transform: translateY(-2px);
 }
 
-.ip-box #server-ip {
+.ip-box #server-ip, .port-box #server-port {
     font-family: 'Courier New', Courier, monospace;
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--primary-color);
 }
 
-.copy-hint {
+.copy-hint, .port-hint {
     display: block;
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.6);
     margin-top: 0.25rem;
+    font-weight: 600;
 }
 
 .hero-btns {
@@ -217,9 +218,28 @@ nav {
 .plugin-card {
     background: var(--dark-card);
     padding: 2.5rem;
-    border-radius: 24px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.repo-stats {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    background: rgba(251, 191, 36, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .plugin-card:hover {
