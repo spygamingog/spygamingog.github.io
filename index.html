@@ -1,172 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpyGaming - Minecraft Network & Plugins</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SpyRun | Esport Speedrunning Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 242, 255, 0.3)',
+                        'neon-purple': '0 0 15px rgba(188, 19, 254, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-text-blue { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        .neon-text-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.5); }
+        .bg-glass { background: rgba(26, 26, 30, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-border { position: relative; border-radius: 1rem; background: linear-gradient(to right, #00f2ff, #bc13fe); padding: 1px; }
+        .gradient-border > div { background: #0a0a0c; border-radius: 1rem; }
+    </style>
 </head>
-<body>
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-user-secret"></i>
-                <span>SPY GAMING</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="plugins.html">Plugins</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="btn-discord"><i class="fab fa-discord"></i> Discord</a></li>
-            </ul>
-        </nav>
-    </header>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased">
 
-    <section id="hero" class="hero">
-        <div class="hero-content container">
-            <h1>Elevate Your <span class="highlight">Minecraft</span> Experience</h1>
-            <p>Join the ultimate Minecraft network featuring custom-built plugins and unique game modes designed for professional gameplay.</p>
-            <div class="server-info">
-                <div class="ip-box" onclick="copyIP()">
-                    <span id="server-ip">spyxhunter.minecraft.pe</span>
-                    <span class="copy-hint">Click to copy IP</span>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-neon-blue">
+                        <i class="fas fa-user-secret text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
                 </div>
-                <div class="port-box" onclick="copyPort()">
-                    <span id="server-port">7101</span>
-                    <span class="port-hint">Port</span>
-                </div>
-            </div>
-            <div class="hero-btns">
-                <a href="plugins.html" class="btn-primary">View Plugins</a>
-                <a href="https://discord.gg/KXCuuSpBzW" class="btn-secondary">Join Community</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="plugins-preview" class="plugins container">
-        <h2 class="section-title">Our Featured Plugins</h2>
-        <div class="plugin-grid">
-            <div class="plugin-card">
-                <div class="plugin-icon"><i class="fas fa-layer-group"></i></div>
-                <h3>SpyCore</h3>
-                <p>The backbone of our network. High-performance core systems for permissions, data management, and essential utilities.</p>
-                <a href="plugins.html" class="btn-plugin">Learn More</a>
-            </div>
-            <div class="plugin-card">
-                <div class="plugin-icon"><i class="fas fa-bed"></i></div>
-                <h3>SpyBedWars</h3>
-                <p>A feature-rich BedWars plugin inspired by BedWars1058, optimized for performance and professional gameplay.</p>
-                <a href="plugins.html" class="btn-plugin">Learn More</a>
-            </div>
-            <div class="plugin-card">
-                <div class="plugin-icon"><i class="fas fa-crosshairs"></i></div>
-                <h3>SpyHunts</h3>
-                <p>Advanced Manhunt and Speedrun mechanics with custom scoreboards, holograms, and dynamic structure tracking.</p>
-                <a href="plugins.html" class="btn-plugin">Learn More</a>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 3rem;">
-            <a href="plugins.html" class="btn-primary">View All Plugins</a>
-        </div>
-    </section>
-
-    <section id="features" class="features bg-dark">
-        <div class="container">
-            <h2 class="section-title">Why Choose SpyGaming?</h2>
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <i class="fas fa-bolt"></i>
-                    <h3>High Performance</h3>
-                    <p>Optimized for low latency and smooth gameplay, even with high player counts.</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Reliable Security</h3>
-                    <p>Custom-built protection systems to ensure a fair and safe environment for all players.</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-code"></i>
-                    <h3>Custom Plugins</h3>
-                    <p>Exclusive features you won't find anywhere else, developed by our expert team.</p>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#leaderboard" class="hover:text-spy-neon-blue transition-colors font-medium">Leaderboard</a>
+                    <a href="#how-to-play" class="hover:text-spy-neon-blue transition-colors font-medium">How to Play</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
+                        <i class="fab fa-discord text-[#5865F2]"></i>
+                        <span>Discord</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-info">
-                <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-user-secret"></i>
-                    <span>SPY GAMING</span>
+    <!-- Hero Section -->
+    <section class="relative pt-40 pb-20 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+            <div class="absolute top-[-10%] left-[10%] w-[40%] h-[40%] bg-spy-neon-blue/10 blur-[120px] rounded-full"></div>
+            <div class="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-spy-neon-purple/10 blur-[120px] rounded-full"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight text-white">
+                THE NEXT GEN OF <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">SPEEDRUNNING</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12">
+                Join the most competitive Minecraft ecosystem. Verify via Discord, compete in unranked 1v1s, and climb the global leaderboards.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple text-white font-bold rounded-xl shadow-neon-blue hover:scale-105 transition-all">
+                    DOWNLOAD MOD
                 </a>
-                <p>&copy; 2026 SpyGaming Network. Not affiliated with Mojang AB.</p>
+                <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-spy-gray text-white font-bold rounded-xl border border-white/10 hover:bg-spy-gray/80 transition-all flex items-center justify-center gap-2">
+                    <i class="fab fa-discord"></i> JOIN DISCORD
+                </a>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/spygamingog" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://discord.gg/KXCuuSpBzW" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section id="leaderboard" class="py-20 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-white mb-4">GLOBAL LEADERBOARD</h2>
+                <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple mx-auto rounded-full"></div>
+            </div>
+
+            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5">
+                <table class="w-full text-left">
+                    <thead class="bg-white/5 text-gray-400 uppercase text-xs tracking-widest font-bold">
+                        <tr>
+                            <th class="px-8 py-5">Rank</th>
+                            <th class="px-8 py-5">Player</th>
+                            <th class="px-8 py-5">Best Time</th>
+                            <th class="px-8 py-5">Elo</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-8 py-6 font-black text-spy-neon-blue">#1</td>
+                            <td class="px-8 py-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-gray-700"></div>
+                                <span class="font-bold text-white">NotMaroof</span>
+                            </td>
+                            <td class="px-8 py-6 font-mono text-spy-neon-purple">12:42.50</td>
+                            <td class="px-8 py-6">2,450</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-8 py-6 font-black text-gray-400">#2</td>
+                            <td class="px-8 py-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-gray-700"></div>
+                                <span class="font-bold text-white">Dreamer_42</span>
+                            </td>
+                            <td class="px-8 py-6 font-mono">13:15.12</td>
+                            <td class="px-8 py-6">2,380</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-8 py-6 font-black text-gray-400">#3</td>
+                            <td class="px-8 py-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-gray-700"></div>
+                                <span class="font-bold text-white">SpeedyGonzales</span>
+                            </td>
+                            <td class="px-8 py-6 font-mono">13:48.00</td>
+                            <td class="px-8 py-6">2,120</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Play Section -->
+    <section id="how-to-play" class="py-20 bg-spy-darker">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-white mb-4">HOW TO PLAY</h2>
+                <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="p-8 bg-spy-gray/50 rounded-2xl border border-white/5 hover:border-spy-neon-blue transition-all group">
+                    <div class="w-12 h-12 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-2xl font-black mb-6 group-hover:bg-spy-neon-blue group-hover:text-white transition-all">1</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Download Mod</h3>
+                    <p class="text-gray-400 leading-relaxed">Install our official Fabric mod (1.21.1) to access the SpyRun menu and custom networking features.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="p-8 bg-spy-gray/50 rounded-2xl border border-white/5 hover:border-spy-neon-purple transition-all group">
+                    <div class="w-12 h-12 bg-spy-neon-purple/10 rounded-xl flex items-center justify-center text-spy-neon-purple text-2xl font-black mb-6 group-hover:bg-spy-neon-purple group-hover:text-white transition-all">2</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Get Discord Token</h3>
+                    <p class="text-gray-400 leading-relaxed">Join our Discord server and use the /token command to receive your unique 6-digit verification code.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="p-8 bg-spy-gray/50 rounded-2xl border border-white/5 hover:border-spy-neon-blue transition-all group">
+                    <div class="w-12 h-12 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-2xl font-black mb-6 group-hover:bg-spy-neon-blue group-hover:text-white transition-all">3</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Paste & Verify</h3>
+                    <p class="text-gray-400 leading-relaxed">Paste your token into the in-game SpyRun menu and hit Verify. You're ready to compete!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:row items-center justify-between gap-8 text-gray-500 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-spy-gray rounded flex items-center justify-center">
+                    <i class="fas fa-user-secret text-white"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+            </div>
+            <p>&copy; 2026 SpyGaming. Not an official Minecraft product.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+                <a href="https://discord.gg/KXCuuSpBzW" class="hover:text-white transition-colors"><i class="fab fa-discord"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Review Modal -->
-    <div id="reviewModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeReviewModal()">&times;</span>
-            <h2 id="modalPluginName">Plugin Review</h2>
-            <p>We value your feedback! Please join our Discord to leave a review, report bugs, or suggest features.</p>
-            <a href="https://discord.gg/KXCuuSpBzW" class="btn-primary" style="display: inline-block; text-decoration: none; margin-bottom: 1rem;">
-                <i class="fab fa-discord"></i> Join Discord to Review
-            </a>
-            <p style="font-size: 0.8rem;">You can also leave a review on the plugin's Modrinth page.</p>
-        </div>
-    </div>
-
-    <script>
-        function copyIP() {
-            const ip = document.getElementById('server-ip').innerText;
-            navigator.clipboard.writeText(ip).then(() => {
-                const hint = document.querySelector('.copy-hint');
-                hint.innerText = 'Copied!';
-                hint.style.color = '#4ade80';
-                setTimeout(() => {
-                    hint.innerText = 'Click to copy IP';
-                    hint.style.color = 'rgba(255, 255, 255, 0.6)';
-                }, 2000);
-            });
-        }
-
-        function copyPort() {
-            const port = document.getElementById('server-port').innerText;
-            navigator.clipboard.writeText(port).then(() => {
-                const hint = document.querySelector('.port-hint');
-                hint.innerText = 'Copied!';
-                hint.style.color = '#4ade80';
-                setTimeout(() => {
-                    hint.innerText = 'Port';
-                    hint.style.color = 'rgba(255, 255, 255, 0.6)';
-                }, 2000);
-            });
-        }
-
-        function openReviewModal(pluginName) {
-            document.getElementById('modalPluginName').innerText = pluginName + " Review";
-            document.getElementById('reviewModal').style.display = 'flex';
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('reviewModal');
-            if (event.target == modal) {
-                closeReviewModal();
-            }
-        }
-    </script>
 </body>
 </html>
