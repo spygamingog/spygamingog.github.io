@@ -124,24 +124,44 @@
                 </div>
 
                 <!-- Export Section -->
-                <div class="bg-spy-gray p-6 rounded-2xl border border-spy-neon-purple/30">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Save Changes</h3>
-                            <p class="text-gray-400 text-sm mt-1">
-                                Since this is a static site, you must update the file manually.
-                            </p>
+                <div class="bg-spy-gray p-6 rounded-2xl border border-spy-neon-purple/30 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <i class="fas fa-save text-9xl text-spy-neon-purple"></i>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold text-white mb-2">Publish Changes</h3>
+                        <p class="text-gray-400 text-sm mb-6 max-w-lg">
+                            Because this is a static website (hosted on GitHub/Desktop), the browser 
+                            <span class="text-red-400 font-bold">cannot write files directly</span>.
+                            You must download the updated data file and replace the old one.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="downloadJSON()" class="flex-1 px-6 py-4 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple text-white font-bold rounded-xl shadow-lg shadow-spy-neon-purple/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-3">
+                                <i class="fas fa-download text-xl"></i>
+                                <div>
+                                    <div class="text-left text-xs uppercase tracking-wider opacity-80">Step 1</div>
+                                    <div class="text-lg">Download leaderboard.json</div>
+                                </div>
+                            </button>
+                            
+                            <div class="flex-1 px-6 py-4 bg-black/40 border border-white/10 rounded-xl flex items-center gap-3 text-gray-300">
+                                <i class="fas fa-folder-open text-xl text-spy-neon-blue"></i>
+                                <div>
+                                    <div class="text-left text-xs uppercase tracking-wider opacity-60">Step 2</div>
+                                    <div class="text-sm">Replace file in: <br><code class="text-white bg-white/10 px-1 rounded">SpyWeb/data/</code></div>
+                                </div>
+                            </div>
                         </div>
-                        <button onclick="copyJSON()" class="px-6 py-2 bg-gradient-to-r from-spy-neon-purple to-pink-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
-                            <i class="fas fa-copy mr-2"></i> COPY JSON
-                        </button>
+
+                        <div class="mt-6 pt-6 border-t border-white/5">
+                            <button onclick="toggleRawJSON()" class="text-xs text-spy-neon-blue hover:text-white underline mb-2">
+                                Show Raw JSON (Advanced)
+                            </button>
+                            <textarea id="json-output" class="w-full h-32 hidden bg-black/50 border border-white/10 rounded-lg p-4 text-xs font-mono text-gray-300 focus:outline-none" readonly></textarea>
+                        </div>
                     </div>
-                    <div class="bg-black/50 p-4 rounded-lg border border-white/5 font-mono text-xs text-gray-400 overflow-x-auto">
-                        <p class="mb-2 text-spy-neon-blue">1. Click "COPY JSON" above.</p>
-                        <p class="mb-2 text-spy-neon-blue">2. Open <span class="text-white bg-white/10 px-1 rounded">SpyWeb/data/leaderboard.json</span> in your IDE.</p>
-                        <p class="mb-0 text-spy-neon-blue">3. Paste the new code and save.</p>
-                    </div>
-                    <textarea id="json-output" class="w-full h-32 mt-4 bg-black/50 border border-white/10 rounded-lg p-4 text-xs font-mono text-gray-300 focus:outline-none" readonly></textarea>
                 </div>
             </div>
         </div>
@@ -281,12 +301,23 @@
             document.getElementById('edit-index').value = "-1";
         }
 
-        function copyJSON() {
-            const copyText = document.getElementById("json-output");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); 
-            navigator.clipboard.writeText(copyText.value);
-            alert("JSON copied! Now paste it into data/leaderboard.json");
+        function downloadJSON() {
+            const dataStr = JSON.stringify(leaderboardData, null, 2);
+            const blob = new Blob([dataStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "leaderboard.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleRawJSON() {
+            const el = document.getElementById('json-output');
+            el.classList.toggle('hidden');
         }
     </script>
 </body>
