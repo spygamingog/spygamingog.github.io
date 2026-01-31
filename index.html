@@ -115,17 +115,14 @@
         </div>
     </section>
 
-    <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase Client - REMOVED (Using Fetch API directly) -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
     
     <!-- Script to Fetch Leaderboard -->
     <script>
-        // Initialize Supabase
+        // Supabase Configuration
         const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
-        // WARNING: Using secret key for now to ensure connection. 
-        // Ideally, replace this with your Supabase ANON PUBLIC KEY for client-side security.
-        const supabaseKey = 'sb_secret_k5IYW8WhfFfHzHlwKVwz9Q_ZzpzjUtR'; 
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseKey = 'sb_secret_k5IYW8WhfFfHzHlwKVwz9Q_ZzpzjUtR'; // Using working key
 
         function formatTime(ms) {
             if (!ms) return "00:00:00";
@@ -144,14 +141,19 @@
             const tbody = document.getElementById('leaderboard-body');
             
             try {
-                // Fetch from Supabase
-                // Mapping: player_name -> name, score -> time (ms), uuid -> avatar
-                const { data, error } = await supabase
-                    .from('leaderboard')
-                    .select('player_name, score, uuid, discord_handle')
-                    .order('score', { ascending: true }); // Lower score (time) is better
+                // Fetch from Supabase REST API directly
+                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=player_name,score,uuid,discord_handle&order=score.asc`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
 
-                if (error) throw error;
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
 
                 if (!data || data.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-gray-400">No runs recorded yet.</td></tr>`;
@@ -194,7 +196,10 @@
                 
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
-                tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-red-400">Error loading data.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-red-400">
+                    Error loading data: ${error.message || error}<br>
+                    <span class="text-xs text-gray-500">Check Console for Details</span>
+                </td></tr>`;
             }
         }
 
