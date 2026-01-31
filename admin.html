@@ -73,10 +73,7 @@
                     <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Add / Edit Entry</h3>
                     <form id="entry-form" class="space-y-4">
                         <input type="hidden" id="edit-index" value="-1">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Rank</label>
-                            <input type="number" id="rank" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="1" required>
-                        </div>
+                        <!-- Removed manual Rank input as it's auto-calculated by time -->
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Player Name</label>
                             <input type="text" id="player-name" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="SpyGamingOG" required>
@@ -86,12 +83,14 @@
                             <input type="text" id="time" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="00:15:32" required pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Platform</label>
-                            <select id="platform" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none">
-                                <option value="Java">Java Edition</option>
-                                <option value="Bedrock">Bedrock Edition</option>
-                            </select>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Discord Handle (Optional)</label>
+                            <input type="text" id="discord-handle" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="SpyGamingOG#1234">
                         </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">UUID (Optional, for Skin)</label>
+                            <input type="text" id="uuid" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="Minecraft UUID">
+                        </div>
+                        
                         <div class="pt-4 flex gap-2">
                             <button type="submit" class="flex-1 bg-spy-neon-blue text-black font-bold py-3 rounded-lg hover:bg-white transition-colors">
                                 SAVE ENTRY
@@ -113,6 +112,7 @@
                             <tr>
                                 <th class="px-6 py-4">Rank</th>
                                 <th class="px-6 py-4">Player</th>
+                                <th class="px-6 py-4">Discord</th>
                                 <th class="px-6 py-4">Time</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
@@ -123,43 +123,15 @@
                     </table>
                 </div>
 
-                <!-- Export Section -->
-                <div class="bg-spy-gray p-6 rounded-2xl border border-spy-neon-purple/30 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <i class="fas fa-save text-9xl text-spy-neon-purple"></i>
-                    </div>
-                    
-                    <div class="relative z-10">
-                        <h3 class="text-2xl font-bold text-white mb-2">Publish Changes</h3>
-                        <p class="text-gray-400 text-sm mb-6 max-w-lg">
-                            Because this is a static website (hosted on GitHub/Desktop), the browser 
-                            <span class="text-red-400 font-bold">cannot write files directly</span>.
-                            You must download the updated data file and replace the old one.
-                        </p>
-
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <button onclick="downloadJSON()" class="flex-1 px-6 py-4 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple text-white font-bold rounded-xl shadow-lg shadow-spy-neon-purple/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-3">
-                                <i class="fas fa-download text-xl"></i>
-                                <div>
-                                    <div class="text-left text-xs uppercase tracking-wider opacity-80">Step 1</div>
-                                    <div class="text-lg">Download leaderboard.json</div>
-                                </div>
-                            </button>
-                            
-                            <div class="flex-1 px-6 py-4 bg-black/40 border border-white/10 rounded-xl flex items-center gap-3 text-gray-300">
-                                <i class="fas fa-folder-open text-xl text-spy-neon-blue"></i>
-                                <div>
-                                    <div class="text-left text-xs uppercase tracking-wider opacity-60">Step 2</div>
-                                    <div class="text-sm">Replace file in: <br><code class="text-white bg-white/10 px-1 rounded">SpyWeb/data/</code></div>
-                                </div>
-                            </div>
+                <!-- Status Section -->
+                <div class="bg-spy-gray p-6 rounded-2xl border border-spy-neon-blue/30 relative overflow-hidden">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-spy-neon-blue/20 flex items-center justify-center text-spy-neon-blue text-xl">
+                            <i class="fas fa-database"></i>
                         </div>
-
-                        <div class="mt-6 pt-6 border-t border-white/5">
-                            <button onclick="toggleRawJSON()" class="text-xs text-spy-neon-blue hover:text-white underline mb-2">
-                                Show Raw JSON (Advanced)
-                            </button>
-                            <textarea id="json-output" class="w-full h-32 hidden bg-black/50 border border-white/10 rounded-lg p-4 text-xs font-mono text-gray-300 focus:outline-none" readonly></textarea>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Database Connected</h3>
+                            <p class="text-gray-400 text-sm">Changes are saved automatically to Supabase.</p>
                         </div>
                     </div>
                 </div>
@@ -167,7 +139,15 @@
         </div>
     </div>
 
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
+        const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; // Publishable Key
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
         // --- Authentication ---
         const loginModal = document.getElementById('login-modal');
         const dashboard = document.getElementById('dashboard');
@@ -207,21 +187,39 @@
         // --- Data Management ---
         let leaderboardData = [];
 
+        // Helper to format/parse time
+        function formatTime(ms) {
+            if (!ms) return "00:00:00";
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            return [
+                hours.toString().padStart(2, '0'),
+                minutes.toString().padStart(2, '0'),
+                seconds.toString().padStart(2, '0')
+            ].join(':');
+        }
+
+        function parseTime(timeStr) {
+            const [h, m, s] = timeStr.split(':').map(Number);
+            return ((h * 3600) + (m * 60) + s) * 1000;
+        }
+
         async function loadData() {
             try {
-                // Try to load from local storage first to persist unsaved edits in session
-                // If not, fetch from file
-                const saved = localStorage.getItem('spy_temp_data');
-                if (saved) {
-                    leaderboardData = JSON.parse(saved);
-                } else {
-                    const res = await fetch('data/leaderboard.json');
-                    if (res.ok) leaderboardData = await res.json();
-                }
+                // Map columns: score -> time logic
+                const { data, error } = await supabase
+                    .from('leaderboard')
+                    .select('id, player_name, score, discord_handle, uuid')
+                    .order('score', { ascending: true });
+                
+                if (error) throw error;
+                
+                leaderboardData = data || [];
                 renderTable();
-                updateJSONOutput();
             } catch (e) {
                 console.error("Error loading data", e);
+                alert("Failed to load data from Supabase. Check console.");
             }
         }
 
@@ -229,95 +227,100 @@
             const tbody = document.getElementById('admin-tbody');
             tbody.innerHTML = '';
             
-            // Sort by rank
-            leaderboardData.sort((a, b) => a.rank - b.rank);
-
             leaderboardData.forEach((entry, index) => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition-colors';
+                
+                const timeStr = formatTime(entry.score);
+                const rank = index + 1; // Rank based on sorted order
+
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-mono text-spy-neon-blue">#${entry.rank}</td>
-                    <td class="px-6 py-4 font-bold text-white">${entry.name}</td>
-                    <td class="px-6 py-4 font-mono text-gray-300">${entry.time}</td>
+                    <td class="px-6 py-4 font-mono text-spy-neon-blue">#${rank}</td>
+                    <td class="px-6 py-4 font-bold text-white">${entry.player_name}</td>
+                    <td class="px-6 py-4 font-mono text-gray-400 text-xs">${entry.discord_handle || '-'}</td>
+                    <td class="px-6 py-4 font-mono text-gray-300">${timeStr}</td>
                     <td class="px-6 py-4 text-right">
-                        <button onclick="editEntry(${index})" class="text-spy-neon-blue hover:text-white mr-3"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteEntry(${index})" class="text-red-500 hover:text-red-400"><i class="fas fa-trash"></i></button>
+                        <button onclick="editEntry(${entry.id})" class="text-spy-neon-blue hover:text-white mr-3"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteEntry(${entry.id})" class="text-red-500 hover:text-red-400"><i class="fas fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function updateJSONOutput() {
-            const json = JSON.stringify(leaderboardData, null, 2);
-            document.getElementById('json-output').value = json;
-            localStorage.setItem('spy_temp_data', json);
-        }
-
         // --- Form Actions ---
         const form = document.getElementById('entry-form');
         
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const index = parseInt(document.getElementById('edit-index').value);
+            const editId = document.getElementById('edit-index').value;
             
+            const timeStr = document.getElementById('time').value;
+            const scoreMs = parseTime(timeStr);
+
             const entry = {
-                name: document.getElementById('player-name').value,
-                time: document.getElementById('time').value,
-                rank: parseInt(document.getElementById('rank').value),
-                platform: document.getElementById('platform').value
+                player_name: document.getElementById('player-name').value,
+                score: scoreMs,
+                discord_handle: document.getElementById('discord-handle').value || 'NULL',
+                uuid: document.getElementById('uuid').value || 'NULL'
             };
 
-            if (index > -1) {
-                leaderboardData[index] = entry;
-            } else {
-                leaderboardData.push(entry);
-            }
+            try {
+                if (editId !== "-1") {
+                    // Update
+                    const { error } = await supabase
+                        .from('leaderboard')
+                        .update(entry)
+                        .eq('id', editId);
+                    if (error) throw error;
+                } else {
+                    // Insert
+                    const { error } = await supabase
+                        .from('leaderboard')
+                        .insert([entry]);
+                    if (error) throw error;
+                }
 
-            resetForm();
-            renderTable();
-            updateJSONOutput();
+                resetForm();
+                loadData();
+            } catch (error) {
+                console.error("Error saving data:", error);
+                alert("Failed to save data. Make sure RLS is disabled or policy allows write.");
+            }
         });
 
-        function editEntry(index) {
-            const entry = leaderboardData[index];
-            document.getElementById('edit-index').value = index;
-            document.getElementById('rank').value = entry.rank;
-            document.getElementById('player-name').value = entry.name;
-            document.getElementById('time').value = entry.time;
-            document.getElementById('platform').value = entry.platform || 'Java';
+        function editEntry(id) {
+            const entry = leaderboardData.find(x => x.id === id);
+            if (!entry) return;
+            
+            document.getElementById('edit-index').value = id;
+            // Rank is calculated, not edited
+            document.getElementById('player-name').value = entry.player_name;
+            document.getElementById('time').value = formatTime(entry.score);
+            document.getElementById('discord-handle').value = entry.discord_handle === 'NULL' ? '' : entry.discord_handle;
+            document.getElementById('uuid').value = entry.uuid === 'NULL' ? '' : entry.uuid;
         }
 
-        function deleteEntry(index) {
+        async function deleteEntry(id) {
             if(confirm('Remove this player?')) {
-                leaderboardData.splice(index, 1);
-                renderTable();
-                updateJSONOutput();
+                try {
+                    const { error } = await supabase
+                        .from('leaderboard')
+                        .delete()
+                        .eq('id', id);
+                    if (error) throw error;
+                    
+                    loadData();
+                } catch (error) {
+                    console.error("Error deleting:", error);
+                    alert("Failed to delete.");
+                }
             }
         }
 
         function resetForm() {
             form.reset();
             document.getElementById('edit-index').value = "-1";
-        }
-
-        function downloadJSON() {
-            const dataStr = JSON.stringify(leaderboardData, null, 2);
-            const blob = new Blob([dataStr], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "leaderboard.json";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function toggleRawJSON() {
-            const el = document.getElementById('json-output');
-            el.classList.toggle('hidden');
         }
     </script>
 </body>
