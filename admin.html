@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpyRun | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased min-h-screen flex items-center justify-center">
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
+        <div class="bg-spy-gray p-8 rounded-2xl border border-white/10 w-full max-w-md shadow-2xl">
+            <div class="text-center mb-8">
+                <i class="fas fa-user-secret text-4xl text-spy-neon-blue mb-4"></i>
+                <h2 class="text-2xl font-bold text-white">Admin Access</h2>
+                <p class="text-gray-400 text-sm">Restricted Area. Authorized Personnel Only.</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Username</label>
+                    <input type="text" id="username" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none transition-colors" placeholder="Enter username">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Password</label>
+                    <input type="password" id="password" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none transition-colors" placeholder="Enter password">
+                </div>
+                <div id="login-error" class="text-red-500 text-sm hidden text-center font-bold">Invalid credentials</div>
+                <button type="submit" class="w-full bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple text-white font-bold py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    ACCESS DASHBOARD
+                </button>
+            </form>
+            <div class="mt-6 text-center">
+                <a href="index.html" class="text-gray-500 hover:text-white text-sm transition-colors">← Back to Website</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Hidden by default) -->
+    <div id="dashboard" class="w-full max-w-6xl mx-auto px-4 py-8 hidden">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-white">Leaderboard Manager</h1>
+            <div class="flex gap-4">
+                <a href="index.html" class="px-4 py-2 bg-spy-gray rounded-lg text-gray-400 hover:text-white transition-colors">View Site</a>
+                <button onclick="logout()" class="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors">Logout</button>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Form -->
+            <div class="lg:col-span-1">
+                <div class="bg-spy-gray p-6 rounded-2xl border border-white/10 sticky top-8">
+                    <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Add / Edit Entry</h3>
+                    <form id="entry-form" class="space-y-4">
+                        <input type="hidden" id="edit-index" value="-1">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Rank</label>
+                            <input type="number" id="rank" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="1" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Player Name</label>
+                            <input type="text" id="player-name" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="SpyGamingOG" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Time (HH:MM:SS)</label>
+                            <input type="text" id="time" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none" placeholder="00:15:32" required pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Platform</label>
+                            <select id="platform" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-spy-neon-blue focus:outline-none">
+                                <option value="Java">Java Edition</option>
+                                <option value="Bedrock">Bedrock Edition</option>
+                            </select>
+                        </div>
+                        <div class="pt-4 flex gap-2">
+                            <button type="submit" class="flex-1 bg-spy-neon-blue text-black font-bold py-3 rounded-lg hover:bg-white transition-colors">
+                                SAVE ENTRY
+                            </button>
+                            <button type="button" onclick="resetForm()" class="px-4 py-3 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors">
+                                CLEAR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List & Export -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Data Table -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-black/20 text-gray-400 uppercase text-xs font-bold">
+                            <tr>
+                                <th class="px-6 py-4">Rank</th>
+                                <th class="px-6 py-4">Player</th>
+                                <th class="px-6 py-4">Time</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tbody" class="divide-y divide-white/5">
+                            <!-- Rows inserted via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Export Section -->
+                <div class="bg-spy-gray p-6 rounded-2xl border border-spy-neon-purple/30">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Save Changes</h3>
+                            <p class="text-gray-400 text-sm mt-1">
+                                Since this is a static site, you must update the file manually.
+                            </p>
+                        </div>
+                        <button onclick="copyJSON()" class="px-6 py-2 bg-gradient-to-r from-spy-neon-purple to-pink-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
+                            <i class="fas fa-copy mr-2"></i> COPY JSON
+                        </button>
+                    </div>
+                    <div class="bg-black/50 p-4 rounded-lg border border-white/5 font-mono text-xs text-gray-400 overflow-x-auto">
+                        <p class="mb-2 text-spy-neon-blue">1. Click "COPY JSON" above.</p>
+                        <p class="mb-2 text-spy-neon-blue">2. Open <span class="text-white bg-white/10 px-1 rounded">SpyWeb/data/leaderboard.json</span> in your IDE.</p>
+                        <p class="mb-0 text-spy-neon-blue">3. Paste the new code and save.</p>
+                    </div>
+                    <textarea id="json-output" class="w-full h-32 mt-4 bg-black/50 border border-white/10 rounded-lg p-4 text-xs font-mono text-gray-300 focus:outline-none" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Authentication ---
+        const loginModal = document.getElementById('login-modal');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('login-form');
+        const errorMsg = document.getElementById('login-error');
+
+        // Check if already logged in
+        if (sessionStorage.getItem('spy_admin_auth') === 'true') {
+            showDashboard();
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+
+            if (u === 'SpyGamingOG' && p === 'admin123') {
+                sessionStorage.setItem('spy_admin_auth', 'true');
+                showDashboard();
+            } else {
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => errorMsg.classList.add('hidden'), 3000);
+            }
+        });
+
+        function showDashboard() {
+            loginModal.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+            loadData();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('spy_admin_auth');
+            location.reload();
+        }
+
+        // --- Data Management ---
+        let leaderboardData = [];
+
+        async function loadData() {
+            try {
+                // Try to load from local storage first to persist unsaved edits in session
+                // If not, fetch from file
+                const saved = localStorage.getItem('spy_temp_data');
+                if (saved) {
+                    leaderboardData = JSON.parse(saved);
+                } else {
+                    const res = await fetch('data/leaderboard.json');
+                    if (res.ok) leaderboardData = await res.json();
+                }
+                renderTable();
+                updateJSONOutput();
+            } catch (e) {
+                console.error("Error loading data", e);
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('admin-tbody');
+            tbody.innerHTML = '';
+            
+            // Sort by rank
+            leaderboardData.sort((a, b) => a.rank - b.rank);
+
+            leaderboardData.forEach((entry, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-mono text-spy-neon-blue">#${entry.rank}</td>
+                    <td class="px-6 py-4 font-bold text-white">${entry.name}</td>
+                    <td class="px-6 py-4 font-mono text-gray-300">${entry.time}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="editEntry(${index})" class="text-spy-neon-blue hover:text-white mr-3"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteEntry(${index})" class="text-red-500 hover:text-red-400"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateJSONOutput() {
+            const json = JSON.stringify(leaderboardData, null, 2);
+            document.getElementById('json-output').value = json;
+            localStorage.setItem('spy_temp_data', json);
+        }
+
+        // --- Form Actions ---
+        const form = document.getElementById('entry-form');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('edit-index').value);
+            
+            const entry = {
+                name: document.getElementById('player-name').value,
+                time: document.getElementById('time').value,
+                rank: parseInt(document.getElementById('rank').value),
+                platform: document.getElementById('platform').value
+            };
+
+            if (index > -1) {
+                leaderboardData[index] = entry;
+            } else {
+                leaderboardData.push(entry);
+            }
+
+            resetForm();
+            renderTable();
+            updateJSONOutput();
+        });
+
+        function editEntry(index) {
+            const entry = leaderboardData[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('rank').value = entry.rank;
+            document.getElementById('player-name').value = entry.name;
+            document.getElementById('time').value = entry.time;
+            document.getElementById('platform').value = entry.platform || 'Java';
+        }
+
+        function deleteEntry(index) {
+            if(confirm('Remove this player?')) {
+                leaderboardData.splice(index, 1);
+                renderTable();
+                updateJSONOutput();
+            }
+        }
+
+        function resetForm() {
+            form.reset();
+            document.getElementById('edit-index').value = "-1";
+        }
+
+        function copyJSON() {
+            const copyText = document.getElementById("json-output");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value);
+            alert("JSON copied! Now paste it into data/leaderboard.json");
+        }
+    </script>
+</body>
+</html>

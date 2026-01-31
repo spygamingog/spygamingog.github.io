@@ -51,6 +51,7 @@
                 </div>
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#leaderboard" class="hover:text-spy-neon-blue transition-colors font-medium">Leaderboard</a>
+                    <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
                     <a href="#how-to-play" class="hover:text-spy-neon-blue transition-colors font-medium">How to Play</a>
                     <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
                         <i class="fab fa-discord text-[#5865F2]"></i>
@@ -119,10 +120,9 @@
         async function fetchLeaderboard() {
             const tbody = document.getElementById('leaderboard-body');
             try {
-                // Try to fetch from the plugin API (assuming localhost for now)
-                // In production, this URL would be the actual server IP/domain
-                const response = await fetch('http://localhost:8081/api/stats');
-                if (!response.ok) throw new Error('Network response was not ok');
+                // Fetch from static JSON file
+                const response = await fetch('data/leaderboard.json');
+                if (!response.ok) throw new Error('Failed to load data');
                 
                 const data = await response.json();
                 
@@ -133,8 +133,11 @@
 
                 tbody.innerHTML = '';
                 
-                data.forEach((player, index) => {
-                    const rank = index + 1;
+                // Sort by rank
+                data.sort((a, b) => a.rank - b.rank);
+
+                data.forEach((player) => {
+                    const rank = player.rank;
                     const rankColor = rank === 1 ? 'text-spy-neon-blue' : (rank === 2 ? 'text-spy-neon-purple' : 'text-gray-400');
                     const timeColor = rank === 1 ? 'text-spy-neon-purple' : 'text-white';
                     
@@ -155,18 +158,23 @@
                 console.error('Failed to fetch leaderboard:', error);
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="3" class="px-8 py-6 text-center text-red-400">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>
-                            Server Offline or Unreachable
+                        <td colspan="3" class="px-8 py-6 text-center text-gray-400">
+                            No records found.
                         </td>
                     </tr>
                 `;
             }
         }
 
-        // Fetch on load and every 30 seconds
+        // Fetch on load
         fetchLeaderboard();
-        setInterval(fetchLeaderboard, 30000);
+        
+        // Secret Admin Access (Press Ctrl+Alt+L)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.altKey && e.key === 'l') {
+                window.location.href = 'admin.html';
+            }
+        });
     </script>
 
     <!-- How to Play Section -->

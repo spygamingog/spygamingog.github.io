@@ -1,90 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plugins - SpyGaming</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SpyRun | Plugins & Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-user-secret"></i>
-                <span>SPY GAMING</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="plugins.html" class="active">Plugins</a></li>
-                <li><a href="index.html#features">Features</a></li>
-                <li><a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="btn-discord"><i class="fab fa-discord"></i> Discord</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="page-header container" style="padding-top: 8rem; padding-bottom: 2rem; text-align: center;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Our <span class="highlight">Plugins</span></h1>
-        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Explore our custom-built solutions designed for performance and professional gameplay.</p>
-    </section>
-
-    <section id="plugins" class="plugins container">
-        <div id="plugin-grid-dynamic" class="plugin-grid">
-            <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-color);"></i>
-                <p style="margin-top: 1rem; color: var(--text-muted);">Fetching plugins from GitHub...</p>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-info">
-                <a href="index.html" class="logo" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-user-secret"></i>
-                    <span>SPY GAMING</span>
-                </a>
-                <p>&copy; 2026 SpyGaming Network. Not affiliated with Mojang AB.</p>
-            </div>
-            <div class="footer-links">
-                <a href="https://github.com/spygamingog" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://discord.gg/KXCuuSpBzW" target="_blank"><i class="fab fa-discord"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Review Modal -->
-    <div id="reviewModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeReviewModal()">&times;</span>
-            <h2 id="modalPluginName">Plugin Review</h2>
-            <p>We value your feedback! Please join our Discord to leave a review, report bugs, or suggest features.</p>
-            <a href="https://discord.gg/KXCuuSpBzW" class="btn-primary" style="display: inline-block; text-decoration: none; margin-bottom: 1rem;">
-                <i class="fab fa-discord"></i> Join Discord to Review
-            </a>
-            <p style="font-size: 0.8rem;">You can also leave a review on the plugin's Modrinth page.</p>
-        </div>
-    </div>
-
-    <script src="plugins.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-        function openReviewModal(pluginName) {
-            document.getElementById('modalPluginName').innerText = pluginName + " Review";
-            document.getElementById('reviewModal').style.display = 'flex';
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('reviewModal');
-            if (event.target == modal) {
-                closeReviewModal();
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
             }
         }
     </script>
+</head>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-secret text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html#leaderboard" class="hover:text-spy-neon-blue transition-colors font-medium">Leaderboard</a>
+                    <a href="plugins.html" class="text-spy-neon-blue font-medium">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
+                        <i class="fab fa-discord text-[#5865F2]"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-32 pb-16 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-20">
+            <div class="absolute top-0 left-[20%] w-[30%] h-[30%] bg-spy-neon-blue blur-[100px] rounded-full"></div>
+            <div class="absolute bottom-0 right-[20%] w-[30%] h-[30%] bg-spy-neon-purple blur-[100px] rounded-full"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl font-black text-white mb-6">OUR ECOSYSTEM</h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Powering the next generation of competitive Minecraft with cutting-edge plugins and mods.
+            </p>
+        </div>
+    </section>
+
+    <!-- Plugins Grid -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- SpyRun Core -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-blue transition-all group">
+                    <div class="w-16 h-16 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyRun Core</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">The engine behind the speedrunning platform. Handles matchmaking, timing, and world generation.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Spigot 1.21</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Fabric Client</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:bg-white transition-colors">
+                        Download Plugin
+                    </a>
+                </div>
+
+                <!-- SpyCore -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-purple transition-all group">
+                    <div class="w-16 h-16 bg-spy-neon-purple/10 rounded-xl flex items-center justify-center text-spy-neon-purple text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyCore API</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Shared library for all SpyGamingOG plugins. Provides utilities for GUIs, Items, and Configs.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">API</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Dependency</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        Documentation
+                    </a>
+                </div>
+
+                <!-- SpyHunts -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-red-500 transition-all group">
+                    <div class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-skull-crossbones"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyHunts</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Bounty hunting plugin. Set prices on players' heads and track them down with compasses.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">PvP</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Economy</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
 </body>
 </html>
