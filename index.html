@@ -134,59 +134,59 @@
             const container = document.getElementById('live-matches-container');
             
             try {
-                // 1. Fetch Active Matches (winner is null)
-                const activeResponse = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=is.null`, {
+                // Fetch latest 20 matches, ordered by start time (newest first)
+                // This includes both Live (winner=null) and Ended matches
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches?order=start_time.desc&limit=20`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
-                const activeMatches = await activeResponse.json();
 
-                // 2. Fetch Recently Ended Matches (winner not null, ended in last 60s)
-                // We fetch latest 10 ended matches and filter in JS for simplicity with timestamps
-                const endedResponse = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=neq.null&order=end_time.desc&limit=10`, {
-                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-                });
-                const endedMatchesRaw = await endedResponse.json();
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 
-                // Filter for matches ended within last 60 seconds
-                const now = new Date();
-                const recentlyEnded = endedMatchesRaw.filter(m => {
-                    const endTime = new Date(m.end_time);
-                    const diffMs = now - endTime;
-                    return diffMs < 60000; // 1 minute
-                });
+                const matches = await response.json();
 
-                const allMatches = [...activeMatches, ...recentlyEnded];
+                if (!Array.isArray(matches)) {
+                    throw new Error("Invalid data format received from server");
+                }
 
-                if (allMatches.length === 0) {
+                if (matches.length === 0) {
                     container.innerHTML = `
                         <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
                             <i class="fas fa-ghost text-4xl text-gray-600 mb-4"></i>
-                            <p class="text-gray-400">No active matches right now.</p>
+                            <p class="text-gray-400">No matches found.</p>
                         </div>`;
                     return;
                 }
 
                 container.innerHTML = '';
                 
-                allMatches.forEach(match => {
+                matches.forEach(match => {
+                    // Determine status
                     const isEnded = match.winner_uuid !== null;
                     const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-blue/50";
-                    const statusText = isEnded 
-                        ? `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>WINNER: ${match.winner_name} (${formatTime(match.final_time_ms)})</span>`
-                        : `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;
+                    
+                    let statusText;
+                    if (isEnded) {
+                        statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>WINNER: ${match.winner_name || 'Unknown'} (${formatTime(match.final_time_ms)})</span>`;
+                    } else {
+                        statusText = `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;
+                    }
+
+                    // Avatar logic
+                    const p1Avatar = match.player1_uuid ? `<img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+                    const p2Avatar = match.player2_uuid ? `<img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
 
                     const card = `
                         <div class="group bg-glass rounded-xl p-6 border ${statusClass} transition-all flex flex-col md:flex-row items-center justify-between gap-6">
                             <!-- Players -->
                             <div class="flex items-center gap-8 flex-1 w-full justify-center md:justify-start">
                                 <div class="flex items-center gap-3">
-                                    <img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700">
-                                    <span class="font-bold text-lg text-white">${match.player1_name}</span>
+                                    ${p1Avatar}
+                                    <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
                                 </div>
                                 <div class="text-gray-500 font-black italic text-xl">VS</div>
                                 <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg text-white text-right">${match.player2_name}</span>
-                                    <img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700">
+                                    <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
+                                    ${p2Avatar}
                                 </div>
                             </div>
                             
