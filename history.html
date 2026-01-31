@@ -120,7 +120,8 @@
             const tbody = document.getElementById('history-body');
             try {
                 // Fetch matches where winner_uuid is NOT null (completed games)
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=neq.null&order=start_time.desc&limit=100`, {
+                // Using 'not.is.null' which maps to SQL 'IS NOT NULL'
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=not.is.null&order=start_time.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -145,7 +146,7 @@
                             </td>
                             <td class="px-8 py-6 text-green-400 font-bold">${winner}</td>
                             <td class="px-8 py-6 font-mono text-gray-300">${formatTime(match.final_time_ms)}</td>
-                            <td class="px-8 py-6 text-sm text-gray-500">${formatDate(match.end_time)}</td>
+                            <td class="px-8 py-6 text-sm text-gray-500">${formatDate(match.start_time)}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
