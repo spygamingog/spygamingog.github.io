@@ -198,24 +198,12 @@
 
         // Load immediately
         fetchLeaderboard();
-    </script>
-                console.error('Failed to fetch leaderboard:', error);
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="3" class="px-8 py-6 text-center text-gray-400">
-                            No records found.
-                        </td>
-                    </tr>
-                `;
-            }
-        }
 
-        // Fetch on load
-        fetchLeaderboard();
-        
         // Secret Admin Access (Press Ctrl+Alt+L)
         document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.altKey && e.key === 'l') {
+            // Check for Ctrl + Alt + L (using code to be layout independent and case-insensitive)
+            if (e.ctrlKey && e.altKey && (e.key === 'l' || e.key === 'L' || e.code === 'KeyL')) {
+                e.preventDefault(); // Prevent default browser action if any
                 window.location.href = 'admin.html';
             }
         });
