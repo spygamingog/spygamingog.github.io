@@ -150,7 +150,7 @@
         // Helper headers for Supabase REST
         const getHeaders = () => ({
             'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
+            // 'Authorization': `Bearer ${supabaseKey}`, // Removed to avoid 401 in browser
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal' // Don't return the inserted/updated object
         });

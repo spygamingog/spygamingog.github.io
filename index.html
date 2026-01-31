@@ -142,10 +142,11 @@
             
             try {
                 // Fetch from Supabase REST API directly
+                // Note: Using apikey header only to avoid potential conflicts with Authorization header in some browsers
                 const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=player_name,score,uuid,discord_handle&order=score.asc`, {
                     headers: {
                         'apikey': supabaseKey,
-                        'Authorization': `Bearer ${supabaseKey}`
+                        // 'Authorization': `Bearer ${supabaseKey}` // Try commenting this out if 401 persists
                     }
                 });
 
