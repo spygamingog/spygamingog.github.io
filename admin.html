@@ -145,12 +145,13 @@
     <script>
         // Supabase Configuration
         const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
-        const supabaseKey = 'sb_secret_k5IYW8WhfFfHzHlwKVwz9Q_ZzpzjUtR'; 
+        // Use Publishable Key for client-side code
+        const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
         
         // Helper headers for Supabase REST
         const getHeaders = () => ({
             'apikey': supabaseKey,
-            // 'Authorization': `Bearer ${supabaseKey}`, // Removed to avoid 401 in browser
+            'Authorization': `Bearer ${supabaseKey}`, 
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal' // Don't return the inserted/updated object
         });

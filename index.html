@@ -122,7 +122,8 @@
     <script>
         // Supabase Configuration
         const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
-        const supabaseKey = 'sb_secret_k5IYW8WhfFfHzHlwKVwz9Q_ZzpzjUtR'; // Using working key
+        // Use Publishable Key for client-side code
+        const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
 
         function formatTime(ms) {
             if (!ms) return "00:00:00";
@@ -142,11 +143,10 @@
             
             try {
                 // Fetch from Supabase REST API directly
-                // Note: Using apikey header only to avoid potential conflicts with Authorization header in some browsers
                 const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=player_name,score,uuid,discord_handle&order=score.asc`, {
                     headers: {
                         'apikey': supabaseKey,
-                        // 'Authorization': `Bearer ${supabaseKey}` // Try commenting this out if 401 persists
+                        'Authorization': `Bearer ${supabaseKey}`
                     }
                 });
 
