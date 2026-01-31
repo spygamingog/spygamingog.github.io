@@ -102,42 +102,72 @@
                             <th class="px-8 py-5">Rank</th>
                             <th class="px-8 py-5">Player</th>
                             <th class="px-8 py-5">Best Time</th>
-                            <th class="px-8 py-5">Elo</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
+                    <tbody id="leaderboard-body" class="divide-y divide-white/5">
                         <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td class="px-8 py-6 font-black text-spy-neon-blue">#1</td>
-                            <td class="px-8 py-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-gray-700"></div>
-                                <span class="font-bold text-white">NotMaroof</span>
-                            </td>
-                            <td class="px-8 py-6 font-mono text-spy-neon-purple">12:42.50</td>
-                            <td class="px-8 py-6">2,450</td>
-                        </tr>
-                        <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td class="px-8 py-6 font-black text-gray-400">#2</td>
-                            <td class="px-8 py-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-gray-700"></div>
-                                <span class="font-bold text-white">Dreamer_42</span>
-                            </td>
-                            <td class="px-8 py-6 font-mono">13:15.12</td>
-                            <td class="px-8 py-6">2,380</td>
-                        </tr>
-                        <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td class="px-8 py-6 font-black text-gray-400">#3</td>
-                            <td class="px-8 py-6 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-gray-700"></div>
-                                <span class="font-bold text-white">SpeedyGonzales</span>
-                            </td>
-                            <td class="px-8 py-6 font-mono">13:48.00</td>
-                            <td class="px-8 py-6">2,120</td>
+                            <td colspan="3" class="px-8 py-6 text-center text-gray-400">Loading leaderboard...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
+
+    <!-- Script to Fetch Leaderboard -->
+    <script>
+        async function fetchLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            try {
+                // Try to fetch from the plugin API (assuming localhost for now)
+                // In production, this URL would be the actual server IP/domain
+                const response = await fetch('http://localhost:8081/api/stats');
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-gray-400">No runs recorded yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                
+                data.forEach((player, index) => {
+                    const rank = index + 1;
+                    const rankColor = rank === 1 ? 'text-spy-neon-blue' : (rank === 2 ? 'text-spy-neon-purple' : 'text-gray-400');
+                    const timeColor = rank === 1 ? 'text-spy-neon-purple' : 'text-white';
+                    
+                    const row = `
+                        <tr class="hover:bg-white/[0.02] transition-colors animate-fade-in">
+                            <td class="px-8 py-6 font-black ${rankColor}">#${rank}</td>
+                            <td class="px-8 py-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">${player.name.substring(0,2).toUpperCase()}</div>
+                                <span class="font-bold text-white">${player.name}</span>
+                            </td>
+                            <td class="px-8 py-6 font-mono ${timeColor}">${player.time}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+                
+            } catch (error) {
+                console.error('Failed to fetch leaderboard:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="px-8 py-6 text-center text-red-400">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Server Offline or Unreachable
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Fetch on load and every 30 seconds
+        fetchLeaderboard();
+        setInterval(fetchLeaderboard, 30000);
+    </script>
 
     <!-- How to Play Section -->
     <section id="how-to-play" class="py-20 bg-spy-darker">
