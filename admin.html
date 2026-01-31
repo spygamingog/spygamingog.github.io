@@ -295,14 +295,22 @@
         async function deleteLb(id) {
             if(confirm('Delete Leaderboard Entry?')) {
                 try {
+                    const headers = getHeaders();
+                    headers['Prefer'] = 'return=representation';
+
                     const res = await fetch(`${supabaseUrl}/rest/v1/leaderboard?id=eq.${id}`, { 
                         method: 'DELETE', 
-                        headers: getHeaders() 
+                        headers: headers 
                     });
 
                     if (!res.ok) {
                         const err = await res.json();
-                        throw new Error(err.message || 'Failed to delete');
+                        throw new Error(`(${res.status}) ${err.message || 'Failed to delete'}`);
+                    }
+
+                    const data = await res.json();
+                    if (data.length === 0) {
+                        throw new Error('No records deleted. Check Supabase RLS policies for DELETE permissions.');
                     }
 
                     loadLeaderboard();
@@ -381,9 +389,33 @@
         }
 
         async function deleteMatch(id) {
-            if(confirm('Delete Match?')) {
-                await fetch(`${supabaseUrl}/rest/v1/matches?id=eq.${id}`, { method: 'DELETE', headers: getHeaders() });
-                loadMatches();
+            if(confirm('Delete Match? This cannot be undone.')) {
+                try {
+                    console.log('Deleting match:', id);
+                    const headers = getHeaders();
+                    headers['Prefer'] = 'return=representation'; // Request deleted rows back
+
+                    const res = await fetch(`${supabaseUrl}/rest/v1/matches?id=eq.${id}`, { 
+                        method: 'DELETE', 
+                        headers: headers 
+                    });
+                    
+                    if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(`(${res.status}) ${err.message || 'Failed to delete'}`);
+                    }
+
+                    const data = await res.json();
+                    if (data.length === 0) {
+                        throw new Error('No records deleted. Check Supabase RLS policies for DELETE permissions.');
+                    }
+                    
+                    console.log('Deleted:', data);
+                    loadMatches();
+                } catch (error) {
+                    alert('Error deleting match: ' + error.message);
+                    console.error(error);
+                }
             }
         }
 
