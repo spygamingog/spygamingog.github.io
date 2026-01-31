@@ -162,6 +162,20 @@
                 matches.forEach(match => {
                     // Determine status
                     const isEnded = match.winner_uuid !== null;
+                    
+                    // Filter logic: 
+                    // 1. If active (not ended), ALWAYS show.
+                    // 2. If ended, ONLY show if it ended less than 30 seconds ago.
+                    // We estimate end time using start_time + final_time_ms
+                    if (isEnded) {
+                        const startTime = new Date(match.start_time).getTime();
+                        const endTime = startTime + (match.final_time_ms || 0);
+                        const timeSinceEnd = Date.now() - endTime;
+                        
+                        // If ended more than 30 seconds ago, skip it
+                        if (timeSinceEnd > 30000) return;
+                    }
+
                     const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-blue/50";
                     
                     let statusText;

@@ -120,7 +120,7 @@
             const tbody = document.getElementById('history-body');
             try {
                 // Fetch matches where winner_uuid is NOT null (completed games)
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=neq.null&order=end_time.desc&limit=100`, {
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=neq.null&order=start_time.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
