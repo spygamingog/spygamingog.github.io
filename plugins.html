@@ -70,7 +70,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <!-- SpyRun Core -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-blue transition-all group">
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-blue transition-all group relative overflow-hidden">
                     <div class="w-16 h-16 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-3xl mb-6 group-hover:scale-110 transition-transform">
                         <i class="fas fa-stopwatch"></i>
                     </div>
@@ -80,9 +80,9 @@
                         <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Spigot 1.21</span>
                         <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Fabric Client</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:bg-white transition-colors">
+                    <button class="w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:bg-white transition-colors cursor-not-allowed opacity-80" title="Coming Soon">
                         Download Plugin
-                    </a>
+                    </button>
                 </div>
 
                 <!-- SpyCore -->
@@ -96,10 +96,78 @@
                         <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">API</span>
                         <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Dependency</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                    <button class="w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors cursor-not-allowed opacity-80" title="Internal Use">
                         Documentation
-                    </a>
+                    </button>
                 </div>
+
+                <!-- SpyBedWars -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-red-500 transition-all group">
+                    <div class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyBedWars</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Competitive BedWars implementation with custom shop items, team upgrades, and map reset system.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Minigame</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Multi-Arena</span>
+                    </div>
+                    <button class="w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors cursor-not-allowed opacity-80" title="Private Plugin">
+                        View Details
+                    </button>
+                </div>
+
+                <!-- SpyHunts -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-green-500 transition-all group">
+                    <div class="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyHunts</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Manhunt gamemode automation. Includes tracking compasses, role assignment, and win condition detection.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Manhunt</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Tracking</span>
+                    </div>
+                    <button class="w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors cursor-not-allowed opacity-80" title="Private Plugin">
+                        View Details
+                    </button>
+                </div>
+
+                <!-- SpyNPCs -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-yellow-500 transition-all group">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyNPCs</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Lightweight NPC management for server lobbies. Supports skins, holograms, and command binding.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Utility</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Lobby</span>
+                    </div>
+                    <button class="w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors cursor-not-allowed opacity-80" title="Private Plugin">
+                        View Details
+                    </button>
+                </div>
+
+                <!-- SpyNetherPortals -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-orange-500 transition-all group">
+                    <div class="w-16 h-16 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-dungeon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyNetherPortals</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Advanced portal linking for multi-world setups. Handles 1:8 coordinate scaling and custom destinations.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Mechanic</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">World</span>
+                    </div>
+                    <button class="w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors cursor-not-allowed opacity-80" title="Private Plugin">
+                        View Details
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
                 <!-- SpyHunts -->
                 <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-red-500 transition-all group">
