@@ -145,7 +145,7 @@
                 container.innerHTML = '';
                 
                 matches.forEach(match => {
-                    const isEnded = match.winner_team !== null;
+                    const isEnded = match.winning_team !== null;
                     // Filter out old completed matches (older than 30s)
                     if (isEnded) {
                         const startTime = new Date(match.start_time).getTime();
@@ -155,14 +155,14 @@
 
                     // Separate runners and hunters
                     const participants = match.match_participants_manhunt || [];
-                    const runners = participants.filter(p => p.team === 'runner');
-                    const hunters = participants.filter(p => p.team === 'hunter');
+                    const runners = participants.filter(p => p.team_role === 'runner');
+                    const hunters = participants.filter(p => p.team_role === 'hunter');
 
                     const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-purple/50";
                     
                     let statusText;
                     if (isEnded) {
-                        const winnerText = match.winner_team === 'runners' ? 'Runners Won' : 'Hunters Won';
+                        const winnerText = match.winning_team === 'runner' ? 'Runners Won' : 'Hunters Won';
                         statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>${winnerText} (${formatTime(match.duration_ms)})</span>`;
                     } else {
                         statusText = `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;

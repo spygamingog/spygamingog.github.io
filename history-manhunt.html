@@ -126,7 +126,7 @@
             const tbody = document.getElementById('history-body');
             try {
                 // Fetch from matches_manhunt table with nested participants
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,match_participants_manhunt(*)&winner_team=not.is.null&order=start_time.desc&limit=100`, {
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,match_participants_manhunt(*)&winning_team=not.is.null&order=start_time.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -153,11 +153,11 @@
                 tbody.innerHTML = '';
                 data.forEach((match) => {
                     const participants = match.match_participants_manhunt || [];
-                    const runners = participants.filter(p => p.team === 'runner').map(p => p.player_name).join(', ');
-                    const hunters = participants.filter(p => p.team === 'hunter').map(p => p.player_name).join(', ');
+                    const runners = participants.filter(p => p.team_role === 'runner').map(p => p.player_name).join(', ');
+                    const hunters = participants.filter(p => p.team_role === 'hunter').map(p => p.player_name).join(', ');
                     
-                    const winnerText = match.winner_team === 'runners' ? 'Runners' : 'Hunters';
-                    const winnerColor = match.winner_team === 'runners' ? 'text-spy-neon-purple' : 'text-spy-neon-blue';
+                    const winnerText = match.winning_team === 'runner' ? 'Runners' : 'Hunters';
+                    const winnerColor = match.winning_team === 'runner' ? 'text-spy-neon-purple' : 'text-spy-neon-blue';
 
                     const row = `
                         <tr class="hover:bg-white/[0.02] transition-colors">
