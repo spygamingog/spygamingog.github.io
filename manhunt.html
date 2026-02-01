@@ -119,8 +119,8 @@
             
             try {
                 // Fetch matches WITH participants using join
-                // Note: select=*,match_participants_manhunt(*) fetches all match fields and nested participants
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,match_participants_manhunt(*)&order=start_time.desc&limit=20`, {
+                // Note: select=*,matches_participants_manhunt(*) fetches all match fields and nested participants
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,matches_participants_manhunt(*)&order=start_time.desc&limit=20`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -154,7 +154,7 @@
                     }
 
                     // Separate runners and hunters
-                    const participants = match.match_participants_manhunt || [];
+                    const participants = match.matches_participants_manhunt || [];
                     const runners = participants.filter(p => p.team_role === 'runner');
                     const hunters = participants.filter(p => p.team_role === 'hunter');
 
