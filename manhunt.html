@@ -118,8 +118,9 @@
             const container = document.getElementById('manhunt-matches-container');
             
             try {
-                // Fetch latest 20 matches from matches_manhunt
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?order=start_time.desc&limit=20`, {
+                // Fetch matches WITH participants using join
+                // Note: select=*,match_participants_manhunt(*) fetches all match fields and nested participants
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,match_participants_manhunt(*)&order=start_time.desc&limit=20`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -144,39 +145,58 @@
                 container.innerHTML = '';
                 
                 matches.forEach(match => {
-                    const isEnded = match.winner_uuid !== null;
+                    const isEnded = match.winner_team !== null;
+                    // Filter out old completed matches (older than 30s)
                     if (isEnded) {
                         const startTime = new Date(match.start_time).getTime();
-                        const endTime = startTime + (match.final_time_ms || 0);
+                        const endTime = startTime + (match.duration_ms || 0);
                         if (Date.now() - endTime > 30000) return;
                     }
+
+                    // Separate runners and hunters
+                    const participants = match.match_participants_manhunt || [];
+                    const runners = participants.filter(p => p.team === 'runner');
+                    const hunters = participants.filter(p => p.team === 'hunter');
 
                     const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-purple/50";
                     
                     let statusText;
                     if (isEnded) {
-                        statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>WINNER: ${match.winner_name || 'Unknown'} (${formatTime(match.final_time_ms)})</span>`;
+                        const winnerText = match.winner_team === 'runners' ? 'Runners Won' : 'Hunters Won';
+                        statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>${winnerText} (${formatTime(match.duration_ms)})</span>`;
                     } else {
                         statusText = `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;
                     }
 
-                    const p1Avatar = match.player1_uuid ? `<img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
-                    const p2Avatar = match.player2_uuid ? `<img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+                    // Helper to generate player list HTML
+                    const generatePlayerList = (players) => {
+                        return players.map(p => `
+                            <div class="flex items-center gap-2" title="${p.player_name}">
+                                <img src="https://mc-heads.net/avatar/${p.player_uuid}" class="w-8 h-8 rounded bg-gray-700">
+                                <span class="font-bold text-white text-sm hidden sm:block">${p.player_name}</span>
+                            </div>
+                        `).join('');
+                    };
 
                     const card = `
                         <div class="group bg-glass rounded-xl p-6 border ${statusClass} transition-all flex flex-col md:flex-row items-center justify-between gap-6">
-                            <div class="flex items-center gap-8 flex-1 w-full justify-center md:justify-start">
-                                <div class="flex items-center gap-3">
-                                    ${p1Avatar}
-                                    <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
+                            <div class="flex items-center gap-4 flex-1 w-full justify-center md:justify-start">
+                                <!-- Runners -->
+                                <div class="flex flex-wrap gap-2 justify-end min-w-[120px]">
+                                    ${generatePlayerList(runners)}
                                 </div>
-                                <div class="text-gray-500 font-black italic text-xl">VS</div>
-                                <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
-                                    ${p2Avatar}
+                                
+                                <div class="flex flex-col items-center px-4">
+                                    <span class="text-gray-500 font-black italic text-xl">VS</span>
+                                    <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">${match.mode || 'Manhunt'}</span>
+                                </div>
+
+                                <!-- Hunters -->
+                                <div class="flex flex-wrap gap-2 justify-start min-w-[120px]">
+                                    ${generatePlayerList(hunters)}
                                 </div>
                             </div>
-                            <div class="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-lg border border-white/5">
+                            <div class="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-lg border border-white/5 whitespace-nowrap">
                                 ${statusText}
                             </div>
                         </div>

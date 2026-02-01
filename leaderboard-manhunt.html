@@ -79,12 +79,14 @@
                         <tr>
                             <th class="px-8 py-5">Rank</th>
                             <th class="px-8 py-5">Player</th>
-                            <th class="px-8 py-5">Score</th>
+                            <th class="px-8 py-5 text-center">Wins (R)</th>
+                            <th class="px-8 py-5 text-center">Wins (H)</th>
+                            <th class="px-8 py-5 text-right">Total Matches</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body" class="divide-y divide-white/5">
                         <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td colspan="3" class="px-8 py-12 text-center">
+                            <td colspan="5" class="px-8 py-12 text-center">
                                 <i class="fas fa-spinner fa-spin text-4xl text-gray-600 mb-4"></i>
                                 <p class="text-gray-400 font-bold">Loading Manhunt Data...</p>
                             </td>
@@ -99,29 +101,17 @@
         const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
         const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
 
-        function formatTime(ms) {
-            if (!ms) return "00:00:00";
-            const seconds = Math.floor((ms / 1000) % 60);
-            const minutes = Math.floor((ms / (1000 * 60)) % 60);
-            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-            return [
-                hours.toString().padStart(2, '0'),
-                minutes.toString().padStart(2, '0'),
-                seconds.toString().padStart(2, '0')
-            ].join(':');
-        }
-
         async function fetchLeaderboard() {
             const tbody = document.getElementById('leaderboard-body');
             try {
                 // Fetch from leaderboard_manhunt table
-                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard_manhunt?select=player_name,score,uuid,discord_handle&order=score.asc&limit=100`, {
+                // Ordering by total wins (wins_runner + wins_hunter) descending
+                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard_manhunt?select=*&order=total_matches.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
                 if (!response.ok) {
                     if (response.status === 404) {
-                        // Table doesn't exist yet
                         throw new Error("Manhunt leaderboard not yet initialized");
                     }
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -132,7 +122,7 @@
                 if (!data || data.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="3" class="px-8 py-12 text-center">
+                            <td colspan="5" class="px-8 py-12 text-center">
                                 <i class="fas fa-ghost text-4xl text-gray-600 mb-4"></i>
                                 <p class="text-gray-400 font-bold">No runs recorded yet.</p>
                                 <p class="text-gray-500 text-sm mt-2">Be the first to conquer the Manhunt!</p>
@@ -141,15 +131,17 @@
                     return;
                 }
 
+                // Sort by total wins manually just in case
+                data.sort((a, b) => (b.wins_runner + b.wins_hunter) - (a.wins_runner + a.wins_hunter));
+
                 tbody.innerHTML = '';
                 data.forEach((player, index) => {
                     const rank = index + 1;
                     const rankColor = rank === 1 ? 'text-spy-neon-purple' : (rank === 2 ? 'text-spy-neon-blue' : 'text-gray-400');
-                    const timeColor = rank === 1 ? 'text-spy-neon-blue' : 'text-white';
                     
                     let avatarHtml;
-                    if (player.uuid && player.uuid !== 'NULL') {
-                        avatarHtml = `<img src="https://mc-heads.net/avatar/${player.uuid}" class="w-8 h-8 rounded bg-gray-700">`;
+                    if (player.player_uuid) {
+                        avatarHtml = `<img src="https://mc-heads.net/avatar/${player.player_uuid}" class="w-8 h-8 rounded bg-gray-700">`;
                     } else {
                         const initial = player.player_name ? player.player_name.substring(0,2).toUpperCase() : '??';
                         avatarHtml = `<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">${initial}</div>`;
@@ -162,10 +154,11 @@
                                 ${avatarHtml}
                                 <div>
                                     <div class="font-bold text-white">${player.player_name}</div>
-                                    ${player.discord_handle && player.discord_handle !== 'NULL' ? `<div class="text-xs text-gray-500">${player.discord_handle}</div>` : ''}
                                 </div>
                             </td>
-                            <td class="px-8 py-6 font-mono ${timeColor}">${formatTime(player.score)}</td>
+                            <td class="px-8 py-6 text-center font-bold text-spy-neon-purple">${player.wins_runner || 0}</td>
+                            <td class="px-8 py-6 text-center font-bold text-spy-neon-blue">${player.wins_hunter || 0}</td>
+                            <td class="px-8 py-6 text-right font-mono text-gray-400">${player.total_matches || 0}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;

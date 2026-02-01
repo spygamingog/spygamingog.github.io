@@ -125,8 +125,8 @@
         async function fetchHistory() {
             const tbody = document.getElementById('history-body');
             try {
-                // Fetch from matches_manhunt table
-                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?winner_uuid=not.is.null&order=start_time.desc&limit=100`, {
+                // Fetch from matches_manhunt table with nested participants
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?select=*,match_participants_manhunt(*)&winner_team=not.is.null&order=start_time.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -152,17 +152,27 @@
 
                 tbody.innerHTML = '';
                 data.forEach((match) => {
-                    const p1 = match.player1_name || "Unknown";
-                    const p2 = match.player2_name || "Unknown";
-                    const winner = match.winner_name || "None";
+                    const participants = match.match_participants_manhunt || [];
+                    const runners = participants.filter(p => p.team === 'runner').map(p => p.player_name).join(', ');
+                    const hunters = participants.filter(p => p.team === 'hunter').map(p => p.player_name).join(', ');
                     
+                    const winnerText = match.winner_team === 'runners' ? 'Runners' : 'Hunters';
+                    const winnerColor = match.winner_team === 'runners' ? 'text-spy-neon-purple' : 'text-spy-neon-blue';
+
                     const row = `
                         <tr class="hover:bg-white/[0.02] transition-colors">
                             <td class="px-8 py-6 font-bold text-white">
-                                <span class="text-spy-neon-purple">${p1}</span> <span class="text-gray-500 mx-2">vs</span> <span class="text-spy-neon-blue">${p2}</span>
+                                <div class="flex flex-col gap-1">
+                                    <div class="text-sm text-gray-400 font-mono">${match.mode || 'Manhunt'}</div>
+                                    <div>
+                                        <span class="text-spy-neon-purple" title="Runners">${runners || 'Unknown'}</span> 
+                                        <span class="text-gray-500 mx-2 text-xs">VS</span> 
+                                        <span class="text-spy-neon-blue" title="Hunters">${hunters || 'Unknown'}</span>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="px-8 py-6 text-green-400 font-bold">${winner}</td>
-                            <td class="px-8 py-6 font-mono text-gray-300">${formatTime(match.final_time_ms)}</td>
+                            <td class="px-8 py-6 ${winnerColor} font-bold uppercase tracking-wider">${winnerText}</td>
+                            <td class="px-8 py-6 font-mono text-gray-300">${formatTime(match.duration_ms)}</td>
                             <td class="px-8 py-6 text-sm text-gray-500">${formatDate(match.start_time)}</td>
                         </tr>
                     `;
