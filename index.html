@@ -50,8 +50,8 @@
                     <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
                 </div>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="leaderboard.html" class="hover:text-spy-neon-blue transition-colors font-medium">Leaderboard</a>
-                    <a href="history.html" class="hover:text-spy-neon-blue transition-colors font-medium">History</a>
+                    <a href="#speedrun" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
+                    <a href="#manhunt" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
                     <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
                     <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
                         <i class="fab fa-discord text-[#5865F2]"></i>
@@ -72,37 +72,121 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight text-white">
                 THE NEXT GEN OF <br>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">SPEEDRUNNING</span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">COMPETITIVE MC</span>
             </h1>
             <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12">
-                Join the most competitive Minecraft ecosystem. Verify via Discord, compete in unranked 1v1s, and climb the global leaderboards.
+                Join the most competitive Minecraft ecosystem. Verify via Discord, compete in Speedruns or Manhunts, and climb the global leaderboards.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple text-white font-bold rounded-xl shadow-neon-blue hover:scale-105 transition-all">
-                    DOWNLOAD MOD
+                <a href="#speedrun" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-spy-neon-blue to-blue-600 text-white font-bold rounded-xl shadow-neon-blue hover:scale-105 transition-all">
+                    <i class="fas fa-stopwatch mr-2"></i> SPEEDRUN
+                </a>
+                <a href="#manhunt" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-600 to-spy-neon-purple text-white font-bold rounded-xl shadow-neon-purple hover:scale-105 transition-all">
+                    <i class="fas fa-running mr-2"></i> MANHUNT
                 </a>
                 <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-spy-gray text-white font-bold rounded-xl border border-white/10 hover:bg-spy-gray/80 transition-all flex items-center justify-center gap-2">
-                    <i class="fab fa-discord"></i> JOIN DISCORD
+                    <i class="fab fa-discord"></i> DISCORD
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Live Matches Section -->
-    <section id="live-matches" class="py-20 relative">
+    <!-- Game Modes Section -->
+    <section id="gamemodes" class="py-20 bg-black/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-white mb-4">CHOOSE YOUR MODE</h2>
+                <div class="h-1.5 w-24 bg-white/10 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Speedrun Card -->
+                <div class="group relative bg-glass rounded-2xl p-8 border border-white/5 hover:border-spy-neon-blue/50 transition-all hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-spy-neon-blue/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-spy-neon-blue/20 rounded-xl flex items-center justify-center mb-6 text-spy-neon-blue">
+                            <i class="fas fa-stopwatch text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Ranked Speedrun</h3>
+                        <p class="text-gray-400 mb-6">Compete in 1v1 speedruns on random seeds. Climb the global leaderboard and prove your skills.</p>
+                        <a href="#speedrun" class="inline-flex items-center text-spy-neon-blue font-bold hover:gap-2 transition-all">
+                            View Live Matches <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Manhunt Card -->
+                <div class="group relative bg-glass rounded-2xl p-8 border border-white/5 hover:border-spy-neon-purple/50 transition-all hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-spy-neon-purple/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-spy-neon-purple/20 rounded-xl flex items-center justify-center mb-6 text-spy-neon-purple">
+                            <i class="fas fa-running text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Manhunt</h3>
+                        <p class="text-gray-400 mb-6">The ultimate chase. One Runner vs Hunters. Survive the hunt or eliminate the target.</p>
+                        <a href="#manhunt" class="inline-flex items-center text-spy-neon-purple font-bold hover:gap-2 transition-all">
+                            View Live Matches <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speedrun Live Matches Section -->
+    <section id="speedrun" class="py-20 relative">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 font-bold text-sm animate-pulse">
-                    <div class="w-2 h-2 bg-red-500 rounded-full"></div> LIVE NOW
+                <div class="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold text-sm">
+                    <i class="fas fa-stopwatch"></i> SPEEDRUN
                 </div>
-                <h2 class="text-4xl font-extrabold text-white mb-4">ACTIVE MATCHES</h2>
-                <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple mx-auto rounded-full"></div>
+                <h2 class="text-4xl font-extrabold text-white mb-4">SPEEDRUN MATCHES</h2>
+                <div class="h-1.5 w-24 bg-spy-neon-blue mx-auto rounded-full mb-8"></div>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <a href="leaderboard-speedrun.html" class="px-6 py-2 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold hover:bg-spy-neon-blue/20 transition-all text-sm">
+                        <i class="fas fa-trophy mr-2"></i> Leaderboard
+                    </a>
+                    <a href="history-speedrun.html" class="px-6 py-2 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold hover:bg-spy-neon-blue/20 transition-all text-sm">
+                        <i class="fas fa-history mr-2"></i> History
+                    </a>
+                </div>
             </div>
 
             <div class="grid gap-4" id="live-matches-container">
                 <!-- Matches will be injected here -->
                 <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
                     <p class="text-gray-400">Loading live matches...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manhunt Live Matches Section -->
+    <section id="manhunt" class="py-20 relative bg-black/30">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-spy-neon-purple/10 border border-spy-neon-purple/20 text-spy-neon-purple font-bold text-sm">
+                    <i class="fas fa-running"></i> MANHUNT
+                </div>
+                <h2 class="text-4xl font-extrabold text-white mb-4">MANHUNT MATCHES</h2>
+                <div class="h-1.5 w-24 bg-spy-neon-purple mx-auto rounded-full mb-8"></div>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <a href="leaderboard-manhunt.html" class="px-6 py-2 rounded-full bg-spy-neon-purple/10 border border-spy-neon-purple/20 text-spy-neon-purple font-bold hover:bg-spy-neon-purple/20 transition-all text-sm">
+                        <i class="fas fa-trophy mr-2"></i> Leaderboard
+                    </a>
+                    <a href="history-manhunt.html" class="px-6 py-2 rounded-full bg-spy-neon-purple/10 border border-spy-neon-purple/20 text-spy-neon-purple font-bold hover:bg-spy-neon-purple/20 transition-all text-sm">
+                        <i class="fas fa-history mr-2"></i> History
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid gap-4" id="manhunt-matches-container">
+                <!-- Matches will be injected here -->
+                <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
+                    <i class="fas fa-server text-4xl text-gray-600 mb-4"></i>
+                    <p class="text-gray-400">Manhunt servers are currently offline or no matches are active.</p>
                 </div>
             </div>
         </div>
@@ -223,9 +307,95 @@
             }
         }
 
+
         // Load immediately and refresh every 10 seconds
         fetchLiveMatches();
-        setInterval(fetchLiveMatches, 10000);
+        fetchManhuntMatches();
+        setInterval(() => {
+            fetchLiveMatches();
+            fetchManhuntMatches();
+        }, 10000);
+
+        async function fetchManhuntMatches() {
+            const container = document.getElementById('manhunt-matches-container');
+            
+            try {
+                // Fetch latest 20 matches from matches_manhunt
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches_manhunt?order=start_time.desc&limit=20`, {
+                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) throw new Error("Table not found");
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const matches = await response.json();
+
+                if (!Array.isArray(matches)) throw new Error("Invalid data format");
+
+                if (matches.length === 0) {
+                    container.innerHTML = `
+                        <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
+                            <i class="fas fa-ghost text-4xl text-gray-600 mb-4"></i>
+                            <p class="text-gray-400">No active Manhunt matches found.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                
+                matches.forEach(match => {
+                    const isEnded = match.winner_uuid !== null;
+                    if (isEnded) {
+                        const startTime = new Date(match.start_time).getTime();
+                        const endTime = startTime + (match.final_time_ms || 0);
+                        if (Date.now() - endTime > 30000) return;
+                    }
+
+                    const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-purple/50";
+                    
+                    let statusText;
+                    if (isEnded) {
+                        statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>WINNER: ${match.winner_name || 'Unknown'} (${formatTime(match.final_time_ms)})</span>`;
+                    } else {
+                        statusText = `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;
+                    }
+
+                    const p1Avatar = match.player1_uuid ? `<img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+                    const p2Avatar = match.player2_uuid ? `<img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+
+                    const card = `
+                        <div class="group bg-glass rounded-xl p-6 border ${statusClass} transition-all flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-8 flex-1 w-full justify-center md:justify-start">
+                                <div class="flex items-center gap-3">
+                                    ${p1Avatar}
+                                    <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
+                                </div>
+                                <div class="text-gray-500 font-black italic text-xl">VS</div>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
+                                    ${p2Avatar}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-lg border border-white/5">
+                                ${statusText}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+                
+            } catch (error) {
+                console.warn('Manhunt matches fetch error:', error);
+                container.innerHTML = `
+                    <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
+                        <i class="fas fa-server text-4xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400">Manhunt servers are currently offline or no matches are active.</p>
+                    </div>`;
+            }
+        }
+
 
 
         // Secret Admin Access (Press Ctrl+Alt+L)

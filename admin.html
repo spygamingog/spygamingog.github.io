@@ -61,6 +61,10 @@
         <div class="flex justify-between items-center mb-8">
             <div class="flex items-center gap-4">
                 <h1 class="text-3xl font-bold text-white">SpyRun Admin</h1>
+                <div class="flex bg-spy-gray rounded-lg p-1 border border-white/10 ml-4">
+                    <button onclick="setMode('speedrun')" id="mode-speedrun" class="px-4 py-2 rounded text-sm font-bold bg-spy-neon-blue text-black transition-all">Speedrun</button>
+                    <button onclick="setMode('manhunt')" id="mode-manhunt" class="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all">Manhunt</button>
+                </div>
                 <div class="flex bg-spy-gray rounded-lg p-1 border border-white/10">
                     <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="px-4 py-2 rounded text-sm font-bold bg-spy-neon-blue text-black transition-all">Leaderboard</button>
                     <button onclick="switchTab('matches')" id="tab-matches" class="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all">Matches</button>
@@ -192,6 +196,11 @@
             'Prefer': 'return=minimal'
         });
 
+        // --- State ---
+        let currentMode = 'speedrun';
+        let leaderboardTable = 'leaderboard';
+        let matchesTable = 'matches';
+
         // --- Auth ---
         if (sessionStorage.getItem('spy_admin_auth') === 'true') {
             document.getElementById('login-modal').classList.add('hidden');
@@ -215,7 +224,24 @@
             location.reload();
         }
 
-        // --- Tabs ---
+        // --- Mode & Tabs ---
+        function setMode(mode) {
+            currentMode = mode;
+            if (mode === 'speedrun') {
+                leaderboardTable = 'leaderboard';
+                matchesTable = 'matches';
+                document.getElementById('mode-speedrun').className = "px-4 py-2 rounded text-sm font-bold bg-spy-neon-blue text-black transition-all";
+                document.getElementById('mode-manhunt').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
+            } else {
+                leaderboardTable = 'leaderboard_manhunt';
+                matchesTable = 'matches_manhunt';
+                document.getElementById('mode-speedrun').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
+                document.getElementById('mode-manhunt').className = "px-4 py-2 rounded text-sm font-bold bg-spy-neon-purple text-black transition-all";
+            }
+            loadLeaderboard();
+            loadMatches();
+        }
+
         function switchTab(tab) {
             document.getElementById('section-leaderboard').classList.add('hidden');
             document.getElementById('section-matches').classList.add('hidden');
@@ -223,7 +249,8 @@
             document.getElementById('tab-matches').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
 
             document.getElementById('section-' + tab).classList.remove('hidden');
-            document.getElementById('tab-' + tab).className = "px-4 py-2 rounded text-sm font-bold bg-spy-neon-blue text-black transition-all";
+            const activeColor = currentMode === 'speedrun' ? 'bg-spy-neon-blue' : 'bg-spy-neon-purple';
+            document.getElementById('tab-' + tab).className = `px-4 py-2 rounded text-sm font-bold ${activeColor} text-black transition-all`;
         }
 
         // --- Helpers ---
@@ -245,24 +272,35 @@
         let lbData = [];
         async function loadLeaderboard() {
             try {
-                const res = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=*&order=score.asc`, { headers: getHeaders() });
+                const res = await fetch(`${supabaseUrl}/rest/v1/${leaderboardTable}?select=*&order=score.asc`, { headers: getHeaders() });
+                if (!res.ok) throw new Error("Failed to load or table does not exist");
                 lbData = await res.json();
                 const tbody = document.getElementById('leaderboard-tbody');
                 tbody.innerHTML = '';
+                
+                if (lbData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No data found for ${currentMode}</td></tr>`;
+                    return;
+                }
+
                 lbData.forEach((entry, idx) => {
+                    const highlight = currentMode === 'speedrun' ? 'text-spy-neon-blue' : 'text-spy-neon-purple';
                     tbody.innerHTML += `
                         <tr class="hover:bg-white/5 transition-colors">
-                            <td class="px-6 py-4 font-mono text-spy-neon-blue">#${idx + 1}</td>
+                            <td class="px-6 py-4 font-mono ${highlight}">#${idx + 1}</td>
                             <td class="px-6 py-4 font-bold text-white">${entry.player_name}</td>
                             <td class="px-6 py-4 font-mono text-gray-300">${formatTime(entry.score)}</td>
                             <td class="px-6 py-4 text-right">
-                                <button onclick="editLb(${entry.id})" class="text-spy-neon-blue mr-3"><i class="fas fa-edit"></i></button>
+                                <button onclick="editLb(${entry.id})" class="${highlight} mr-3"><i class="fas fa-edit"></i></button>
                                 <button onclick="deleteLb(${entry.id})" class="text-red-500"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error(e); 
+                document.getElementById('leaderboard-tbody').innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-400">Error: Table '${leaderboardTable}' not found (DB not connected yet).</td></tr>`;
+            }
         }
 
         document.getElementById('leaderboard-form').addEventListener('submit', async (e) => {
@@ -275,7 +313,7 @@
                 uuid: document.getElementById('lb-uuid').value || 'NULL'
             };
 
-            const url = id === "-1" ? `${supabaseUrl}/rest/v1/leaderboard` : `${supabaseUrl}/rest/v1/leaderboard?id=eq.${id}`;
+            const url = id === "-1" ? `${supabaseUrl}/rest/v1/${leaderboardTable}` : `${supabaseUrl}/rest/v1/${leaderboardTable}?id=eq.${id}`;
             const method = id === "-1" ? 'POST' : 'PATCH';
             
             await fetch(url, { method, headers: getHeaders(), body: JSON.stringify(data) });
@@ -298,25 +336,15 @@
                     const headers = getHeaders();
                     headers['Prefer'] = 'return=representation';
 
-                    const res = await fetch(`${supabaseUrl}/rest/v1/leaderboard?id=eq.${id}`, { 
+                    const res = await fetch(`${supabaseUrl}/rest/v1/${leaderboardTable}?id=eq.${id}`, { 
                         method: 'DELETE', 
                         headers: headers 
                     });
 
-                    if (!res.ok) {
-                        const err = await res.json();
-                        throw new Error(`(${res.status}) ${err.message || 'Failed to delete'}`);
-                    }
-
-                    const data = await res.json();
-                    if (data.length === 0) {
-                        throw new Error('No records deleted. Check Supabase RLS policies for DELETE permissions.');
-                    }
-
+                    if (!res.ok) throw new Error('Failed to delete');
                     loadLeaderboard();
                 } catch (error) {
                     alert('Error deleting entry: ' + error.message);
-                    console.error(error);
                 }
             }
         }
@@ -330,25 +358,36 @@
         let matchData = [];
         async function loadMatches() {
             try {
-                const res = await fetch(`${supabaseUrl}/rest/v1/matches?select=*&order=start_time.desc`, { headers: getHeaders() });
+                const res = await fetch(`${supabaseUrl}/rest/v1/${matchesTable}?select=*&order=start_time.desc`, { headers: getHeaders() });
+                if (!res.ok) throw new Error("Failed to load or table does not exist");
                 matchData = await res.json();
                 const tbody = document.getElementById('matches-tbody');
                 tbody.innerHTML = '';
+                
+                if (matchData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No data found for ${currentMode}</td></tr>`;
+                    return;
+                }
+
                 matchData.forEach((match) => {
                     const winnerText = match.winner_name ? `<span class="text-green-400 font-bold">${match.winner_name}</span>` : `<span class="text-red-400 italic">Live</span>`;
+                    const highlight = currentMode === 'speedrun' ? 'text-spy-neon-blue' : 'text-spy-neon-purple';
                     tbody.innerHTML += `
                         <tr class="hover:bg-white/5 transition-colors">
                             <td class="px-6 py-4 font-bold text-white">${match.player1_name} vs ${match.player2_name}</td>
                             <td class="px-6 py-4">${winnerText}</td>
                             <td class="px-6 py-4 font-mono text-gray-300">${formatTime(match.final_time_ms)}</td>
                             <td class="px-6 py-4 text-right">
-                                <button onclick="editMatch('${match.id}')" class="text-spy-neon-blue mr-3"><i class="fas fa-edit"></i></button>
+                                <button onclick="editMatch('${match.id}')" class="${highlight} mr-3"><i class="fas fa-edit"></i></button>
                                 <button onclick="deleteMatch('${match.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error(e); 
+                document.getElementById('matches-tbody').innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-400">Error: Table '${matchesTable}' not found (DB not connected yet).</td></tr>`;
+            }
         }
 
         document.getElementById('match-form').addEventListener('submit', async (e) => {
@@ -364,14 +403,13 @@
                 winner_uuid: winnerName ? (matchData.find(x => x.id === id)?.winner_uuid || 'manual-uuid') : null 
             };
             
-            // Generate UUIDs if new match (basic fallback)
             if (id === "-1") {
                 data.match_id = 'manual-' + Date.now();
                 data.player1_uuid = 'manual-p1';
                 data.player2_uuid = 'manual-p2';
             }
 
-            const url = id === "-1" ? `${supabaseUrl}/rest/v1/matches` : `${supabaseUrl}/rest/v1/matches?id=eq.${id}`;
+            const url = id === "-1" ? `${supabaseUrl}/rest/v1/${matchesTable}` : `${supabaseUrl}/rest/v1/${matchesTable}?id=eq.${id}`;
             const method = id === "-1" ? 'POST' : 'PATCH';
             
             await fetch(url, { method, headers: getHeaders(), body: JSON.stringify(data) });
@@ -391,30 +429,18 @@
         async function deleteMatch(id) {
             if(confirm('Delete Match? This cannot be undone.')) {
                 try {
-                    console.log('Deleting match:', id);
                     const headers = getHeaders();
-                    headers['Prefer'] = 'return=representation'; // Request deleted rows back
+                    headers['Prefer'] = 'return=representation';
 
-                    const res = await fetch(`${supabaseUrl}/rest/v1/matches?id=eq.${id}`, { 
+                    const res = await fetch(`${supabaseUrl}/rest/v1/${matchesTable}?id=eq.${id}`, { 
                         method: 'DELETE', 
                         headers: headers 
                     });
                     
-                    if (!res.ok) {
-                        const err = await res.json();
-                        throw new Error(`(${res.status}) ${err.message || 'Failed to delete'}`);
-                    }
-
-                    const data = await res.json();
-                    if (data.length === 0) {
-                        throw new Error('No records deleted. Check Supabase RLS policies for DELETE permissions.');
-                    }
-                    
-                    console.log('Deleted:', data);
+                    if (!res.ok) throw new Error('Failed to delete');
                     loadMatches();
                 } catch (error) {
                     alert('Error deleting match: ' + error.message);
-                    console.error(error);
                 }
             }
         }

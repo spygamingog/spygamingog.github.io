@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard | SpyRun</title>
+    <title>Speedrun History | SpyRun</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -51,8 +51,6 @@
                     <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium">Home</a>
                     <a href="index.html#speedrun" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
                     <a href="index.html#manhunt" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
-                    <a href="leaderboard.html" class="text-spy-neon-blue font-medium">Leaderboard</a>
-                    <a href="history.html" class="hover:text-spy-neon-blue transition-colors font-medium">History</a>
                     <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
                     <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
                         <i class="fab fa-discord text-[#5865F2]"></i>
@@ -63,30 +61,33 @@
         </div>
     </nav>
 
-    <!-- Leaderboard Section -->
+    <!-- History Section -->
     <section class="pt-32 pb-20 relative min-h-screen">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">GLOBAL LEADERBOARD</h1>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">SPEEDRUN HISTORY</h1>
                 <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple mx-auto rounded-full"></div>
-                <p class="mt-4 text-gray-400">Top Speedrunners</p>
+                <p class="mt-4 text-gray-400">All Past 1v1 Matches</p>
             </div>
 
             <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                <table class="w-full text-left">
-                    <thead class="bg-white/5 text-gray-400 uppercase text-xs tracking-widest font-bold">
-                        <tr>
-                            <th class="px-8 py-5">Rank</th>
-                            <th class="px-8 py-5">Player</th>
-                            <th class="px-8 py-5">Best Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body" class="divide-y divide-white/5">
-                        <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td colspan="3" class="px-8 py-6 text-center text-gray-400">Loading leaderboard...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="max-h-[80vh] overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5 text-gray-400 uppercase text-xs tracking-widest font-bold sticky top-0 backdrop-blur-md z-10">
+                            <tr>
+                                <th class="px-8 py-5">Matchup</th>
+                                <th class="px-8 py-5">Winner</th>
+                                <th class="px-8 py-5">Time</th>
+                                <th class="px-8 py-5">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body" class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td colspan="4" class="px-8 py-6 text-center text-gray-400">Loading history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
@@ -96,7 +97,7 @@
         const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
 
         function formatTime(ms) {
-            if (!ms) return "00:00:00";
+            if (!ms) return "DNF";
             const seconds = Math.floor((ms / 1000) % 60);
             const minutes = Math.floor((ms / (1000 * 60)) % 60);
             const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
@@ -107,10 +108,20 @@
             ].join(':');
         }
 
-        async function fetchLeaderboard() {
-            const tbody = document.getElementById('leaderboard-body');
+        function formatDate(dateString) {
+            if (!dateString) return "";
+            return new Date(dateString).toLocaleDateString(undefined, {
+                year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        async function fetchHistory() {
+            const tbody = document.getElementById('history-body');
             try {
-                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=player_name,score,uuid,discord_handle&order=score.asc&limit=100`, {
+                // Fetch matches where winner_uuid is NOT null (completed games)
+                // Using 'not.is.null' which maps to SQL 'IS NOT NULL'
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches?winner_uuid=not.is.null&order=start_time.desc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -118,45 +129,39 @@
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-gray-400">No runs recorded yet.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-8 py-6 text-center text-gray-400">No matches found.</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = '';
-                data.forEach((player, index) => {
-                    const rank = index + 1;
-                    const rankColor = rank === 1 ? 'text-spy-neon-blue' : (rank === 2 ? 'text-spy-neon-purple' : 'text-gray-400');
-                    const timeColor = rank === 1 ? 'text-spy-neon-purple' : 'text-white';
+                data.forEach((match) => {
+                    const p1 = match.player1_name || "Unknown";
+                    const p2 = match.player2_name || "Unknown";
+                    const winner = match.winner_name || "None";
                     
-                    let avatarHtml;
-                    if (player.uuid && player.uuid !== 'NULL') {
-                        avatarHtml = `<img src="https://mc-heads.net/avatar/${player.uuid}" class="w-8 h-8 rounded bg-gray-700">`;
-                    } else {
-                        const initial = player.player_name ? player.player_name.substring(0,2).toUpperCase() : '??';
-                        avatarHtml = `<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">${initial}</div>`;
-                    }
-
                     const row = `
-                        <tr class="hover:bg-white/[0.02] transition-colors animate-fade-in">
-                            <td class="px-8 py-6 font-black ${rankColor}">#${rank}</td>
-                            <td class="px-8 py-6 flex items-center gap-3">
-                                ${avatarHtml}
-                                <div>
-                                    <div class="font-bold text-white">${player.player_name}</div>
-                                    ${player.discord_handle && player.discord_handle !== 'NULL' ? `<div class="text-xs text-gray-500">${player.discord_handle}</div>` : ''}
-                                </div>
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-8 py-6 font-bold text-white">
+                                <span class="text-spy-neon-blue">${p1}</span> <span class="text-gray-500 mx-2">vs</span> <span class="text-spy-neon-purple">${p2}</span>
                             </td>
-                            <td class="px-8 py-6 font-mono ${timeColor}">${formatTime(player.score)}</td>
+                            <td class="px-8 py-6 text-green-400 font-bold">${winner}</td>
+                            <td class="px-8 py-6 font-mono text-gray-300">${formatTime(match.final_time_ms)}</td>
+                            <td class="px-8 py-6 text-sm text-gray-500">${formatDate(match.start_time)}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
                 });
             } catch (error) {
-                console.error('Error fetching leaderboard:', error);
-                tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-red-400">Error loading data.</td></tr>`;
+                console.error('Error fetching history:', error);
+                tbody.innerHTML = `<tr><td colspan="4" class="px-8 py-6 text-center text-red-400">
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="font-bold">Error loading data</span>
+                        <span class="text-xs font-mono bg-black/30 px-2 py-1 rounded">${error.message}</span>
+                    </div>
+                </td></tr>`;
             }
         }
-        fetchLeaderboard();
+        fetchHistory();
     </script>
 </body>
 </html>
