@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpyRun | Plugins & Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-secret text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium">Home</a>
+                    <a href="speedrun.html" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
+                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
+                    <a href="plugins.html" class="text-spy-neon-blue font-medium">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
+                        <i class="fab fa-discord text-[#5865F2]"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-32 pb-16 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-20">
+            <div class="absolute top-0 left-[20%] w-[30%] h-[30%] bg-spy-neon-blue blur-[100px] rounded-full"></div>
+            <div class="absolute bottom-0 right-[20%] w-[30%] h-[30%] bg-spy-neon-purple blur-[100px] rounded-full"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl font-black text-white mb-6">OUR ECOSYSTEM</h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Powering the next generation of competitive Minecraft with cutting-edge plugins and mods.
+            </p>
+        </div>
+    </section>
+
+    <!-- Plugins Grid -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- SpyRun Core -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-blue transition-all group relative overflow-hidden">
+                    <div class="w-16 h-16 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyRun Core</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">The engine behind the speedrunning platform. Handles matchmaking, timing, and world generation.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Spigot 1.21</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Fabric Client</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:bg-white transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+                <!-- SpySpectator -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-purple transition-all group">
+                    <div class="w-16 h-16 bg-spy-neon-purple/10 rounded-xl flex items-center justify-center text-spy-neon-purple text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpySpectator</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Advanced spectator mode with first-person view, inventory inspection, and teleport menu.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Utility</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Moderation</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+                <!-- SpyBedWars -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-red-500 transition-all group">
+                    <div class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyBedWars</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Competitive BedWars implementation with custom shop items, team upgrades, and map reset system.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Minigame</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Multi-Arena</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+                <!-- SpyHunts -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-green-500 transition-all group">
+                    <div class="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyHunts</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Manhunt gamemode automation. Includes tracking compasses, role assignment, and win condition detection.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Manhunt</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Tracking</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+                <!-- SpyNPCs -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-yellow-500 transition-all group">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyNPCs</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Lightweight NPC management for server lobbies. Supports skins, holograms, and command binding.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Utility</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Lobby</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+                <!-- SpyNetherPortals -->
+                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-orange-500 transition-all group">
+                    <div class="w-16 h-16 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-dungeon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">SpyNetherPortals</h3>
+                    <p class="text-gray-400 mb-6 min-h-[80px]">Advanced portal linking for multi-world setups. Handles 1:8 coordinate scaling and custom destinations.</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Mechanic</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">World</span>
+                    </div>
+                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

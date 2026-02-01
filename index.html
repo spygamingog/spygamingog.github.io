@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpyRun | Esport Speedrunning Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 242, 255, 0.3)',
+                        'neon-purple': '0 0 15px rgba(188, 19, 254, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-text-blue { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        .neon-text-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.5); }
+        .bg-glass { background: rgba(26, 26, 30, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-border { position: relative; border-radius: 1rem; background: linear-gradient(to right, #00f2ff, #bc13fe); padding: 1px; }
+        .gradient-border > div { background: #0a0a0c; border-radius: 1rem; }
+    </style>
+</head>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-neon-blue">
+                        <i class="fas fa-user-secret text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="speedrun.html" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
+                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
+                    <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
+                        <i class="fab fa-discord text-[#5865F2]"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-40 pb-20 overflow-hidden min-h-screen flex items-center">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+            <div class="absolute top-[-10%] left-[10%] w-[40%] h-[40%] bg-spy-neon-blue/10 blur-[120px] rounded-full"></div>
+            <div class="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-spy-neon-purple/10 blur-[120px] rounded-full"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight text-white">
+                THE NEXT GEN OF <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">COMPETITIVE MC</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12">
+                Join the most competitive Minecraft ecosystem. Verify via Discord, compete in Speedruns or Manhunts, and climb the global leaderboards.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="speedrun.html" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-spy-neon-blue to-blue-600 text-white font-bold rounded-xl shadow-neon-blue hover:scale-105 transition-all">
+                    <i class="fas fa-stopwatch mr-2"></i> SPEEDRUN
+                </a>
+                <a href="manhunt.html" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-600 to-spy-neon-purple text-white font-bold rounded-xl shadow-neon-purple hover:scale-105 transition-all">
+                    <i class="fas fa-running mr-2"></i> MANHUNT
+                </a>
+                <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-spy-gray text-white font-bold rounded-xl border border-white/10 hover:bg-spy-gray/80 transition-all flex items-center justify-center gap-2">
+                    <i class="fab fa-discord"></i> DISCORD
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Modes Section -->
+    <section id="gamemodes" class="py-20 bg-black/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-white mb-4">CHOOSE YOUR MODE</h2>
+                <div class="h-1.5 w-24 bg-white/10 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Speedrun Card -->
+                <div class="group relative bg-glass rounded-2xl p-8 border border-white/5 hover:border-spy-neon-blue/50 transition-all hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-spy-neon-blue/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-spy-neon-blue/20 rounded-xl flex items-center justify-center mb-6 text-spy-neon-blue">
+                            <i class="fas fa-stopwatch text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Ranked Speedrun</h3>
+                        <p class="text-gray-400 mb-6">Compete in 1v1 speedruns on random seeds. Climb the global leaderboard and prove your skills.</p>
+                        <a href="speedrun.html" class="inline-flex items-center text-spy-neon-blue font-bold hover:gap-2 transition-all">
+                            View Live Matches <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Manhunt Card -->
+                <div class="group relative bg-glass rounded-2xl p-8 border border-white/5 hover:border-spy-neon-purple/50 transition-all hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-spy-neon-purple/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-spy-neon-purple/20 rounded-xl flex items-center justify-center mb-6 text-spy-neon-purple">
+                            <i class="fas fa-running text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Manhunt</h3>
+                        <p class="text-gray-400 mb-6">The ultimate chase. One Runner vs Hunters. Survive the hunt or eliminate the target.</p>
+                        <a href="manhunt.html" class="inline-flex items-center text-spy-neon-purple font-bold hover:gap-2 transition-all">
+                            View Live Matches <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

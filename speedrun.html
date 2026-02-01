@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpyRun | Speedrun Matches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spy-dark': '#0a0a0c',
+                        'spy-darker': '#050506',
+                        'spy-neon-blue': '#00f2ff',
+                        'spy-neon-purple': '#bc13fe',
+                        'spy-gray': '#1a1a1e',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 242, 255, 0.3)',
+                        'neon-purple': '0 0 15px rgba(188, 19, 254, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-text-blue { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        .neon-text-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.5); }
+        .bg-glass { background: rgba(26, 26, 30, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-border { position: relative; border-radius: 1rem; background: linear-gradient(to right, #00f2ff, #bc13fe); padding: 1px; }
+        .gradient-border > div { background: #0a0a0c; border-radius: 1rem; }
+    </style>
+</head>
+<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-neon-blue">
+                        <i class="fas fa-user-secret text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="speedrun.html" class="text-spy-neon-blue font-bold">Speedrun</a>
+                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
+                    <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
+                        <i class="fab fa-discord text-[#5865F2]"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Speedrun Live Matches Section -->
+    <section class="py-32 relative min-h-screen">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+            <div class="absolute top-[-10%] left-[10%] w-[40%] h-[40%] bg-spy-neon-blue/10 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold text-sm">
+                    <i class="fas fa-stopwatch"></i> SPEEDRUN
+                </div>
+                <h2 class="text-4xl font-extrabold text-white mb-4">LIVE SPEEDRUN MATCHES</h2>
+                <div class="h-1.5 w-24 bg-spy-neon-blue mx-auto rounded-full mb-8"></div>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <a href="leaderboard-speedrun.html" class="px-6 py-2 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold hover:bg-spy-neon-blue/20 transition-all text-sm">
+                        <i class="fas fa-trophy mr-2"></i> Leaderboard
+                    </a>
+                    <a href="history-speedrun.html" class="px-6 py-2 rounded-full bg-spy-neon-blue/10 border border-spy-neon-blue/20 text-spy-neon-blue font-bold hover:bg-spy-neon-blue/20 transition-all text-sm">
+                        <i class="fas fa-history mr-2"></i> History
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid gap-4" id="live-matches-container">
+                <!-- Matches will be injected here -->
+                <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
+                    <p class="text-gray-400">Loading live matches...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script to Fetch Live Matches -->
+    <script>
+        // Supabase Configuration
+        const supabaseUrl = 'https://jnokwgwoonnxjolefjxp.supabase.co';
+        const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
+
+        function formatTime(ms) {
+            if (!ms) return "00:00:00";
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            return [
+                hours.toString().padStart(2, '0'),
+                minutes.toString().padStart(2, '0'),
+                seconds.toString().padStart(2, '0')
+            ].join(':');
+        }
+
+        async function fetchLiveMatches() {
+            const container = document.getElementById('live-matches-container');
+            
+            try {
+                // Fetch latest 20 matches, ordered by start time (newest first)
+                const response = await fetch(`${supabaseUrl}/rest/v1/matches?order=start_time.desc&limit=20`, {
+                    headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const matches = await response.json();
+
+                if (!Array.isArray(matches)) {
+                    throw new Error("Invalid data format received from server");
+                }
+
+                if (matches.length === 0) {
+                    container.innerHTML = `
+                        <div class="bg-glass rounded-xl p-8 text-center border border-white/5">
+                            <i class="fas fa-ghost text-4xl text-gray-600 mb-4"></i>
+                            <p class="text-gray-400">No matches found.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                
+                matches.forEach(match => {
+                    const isEnded = match.winner_uuid !== null;
+                    if (isEnded) {
+                        const startTime = new Date(match.start_time).getTime();
+                        const endTime = startTime + (match.final_time_ms || 0);
+                        if (Date.now() - endTime > 30000) return;
+                    }
+
+                    const statusClass = isEnded ? "border-green-500/30 bg-green-500/5" : "border-white/10 hover:border-spy-neon-blue/50";
+                    
+                    let statusText;
+                    if (isEnded) {
+                        statusText = `<span class="text-green-400 font-bold"><i class="fas fa-flag-checkered mr-2"></i>WINNER: ${match.winner_name || 'Unknown'} (${formatTime(match.final_time_ms)})</span>`;
+                    } else {
+                        statusText = `<span class="text-red-400 font-bold animate-pulse"><i class="fas fa-circle text-[10px] mr-2"></i>IN PROGRESS</span>`;
+                    }
+
+                    const p1Avatar = match.player1_uuid ? `<img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+                    const p2Avatar = match.player2_uuid ? `<img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
+
+                    const card = `
+                        <div class="group bg-glass rounded-xl p-6 border ${statusClass} transition-all flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-8 flex-1 w-full justify-center md:justify-start">
+                                <div class="flex items-center gap-3">
+                                    ${p1Avatar}
+                                    <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
+                                </div>
+                                <div class="text-gray-500 font-black italic text-xl">VS</div>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
+                                    ${p2Avatar}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-lg border border-white/5">
+                                ${statusText}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+                
+            } catch (error) {
+                console.error('Error fetching live matches:', error);
+                container.innerHTML = `
+                    <div class="bg-glass rounded-xl p-8 text-center border border-red-500/30">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-4"></i>
+                        <p class="text-red-400 font-bold mb-2">Error loading matches</p>
+                        <p class="text-gray-400 text-sm font-mono">${error.message}</p>
+                    </div>`;
+            }
+        }
+
+        // Load immediately and refresh every 10 seconds
+        fetchLiveMatches();
+        setInterval(fetchLiveMatches, 10000);
+    </script>
+</body>
+</html>
