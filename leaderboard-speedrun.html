@@ -6,7 +6,7 @@
     <title>Speedrun Leaderboard | SpyRun</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <script>
         tailwind.config = {
             theme: {
@@ -17,43 +17,33 @@
                         'spy-neon-blue': '#00f2ff',
                         'spy-neon-purple': '#bc13fe',
                         'spy-gray': '#1a1a1e',
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'neon-blue': '0 0 15px rgba(0, 242, 255, 0.3)',
-                        'neon-purple': '0 0 15px rgba(188, 19, 254, 0.3)',
                     }
                 }
             }
         }
     </script>
-    <style>
-        .neon-text-blue { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
-        .neon-text-purple { text-shadow: 0 0 10px rgba(188, 19, 254, 0.5); }
-        .bg-glass { background: rgba(26, 26, 30, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-    </style>
 </head>
-<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+<body class="bg-spy-dark text-gray-200 font-sans antialiased selection:bg-spy-neon-blue selection:text-black">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <a href="index.html" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-neon-blue">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(0,242,255,0.3)] group-hover:shadow-[0_0_25px_rgba(188,19,254,0.5)] transition-all">
                         <i class="fas fa-user-secret text-white text-xl"></i>
                     </div>
-                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue group-hover:text-spy-neon-purple transition-colors">RUN</span></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium">Home</a>
-                    <a href="speedrun.html" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
-                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
-                    <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium">Plugins</a>
-                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
-                        <i class="fab fa-discord text-[#5865F2]"></i>
+                    <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Home</a>
+                    <a href="speedrun.html" class="text-spy-neon-blue font-bold text-sm uppercase tracking-wide border-b-2 border-spy-neon-blue pb-1">Speedrun</a>
+                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium text-sm uppercase tracking-wide">Manhunt</a>
+                    <a href="leaderboard.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Leaderboard</a>
+                    <a href="history.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">History</a>
+                    <a href="plugins.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 flex items-center gap-2 transition-all hover:scale-105 group">
+                        <i class="fab fa-discord text-[#5865F2] group-hover:animate-bounce"></i>
                         <span>Discord</span>
                     </a>
                 </div>
@@ -61,28 +51,43 @@
         </div>
     </nav>
 
-    <!-- Leaderboard Section -->
-    <section class="pt-32 pb-20 relative min-h-screen">
+    <!-- Leaderboard Header -->
+    <section class="pt-32 pb-10 relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
+            <div class="absolute top-[-10%] left-[20%] w-[30%] h-[30%] bg-spy-neon-blue/10 blur-[100px] rounded-full animate-pulse"></div>
+            <div class="absolute top-[10%] right-[20%] w-[30%] h-[30%] bg-spy-neon-purple/10 blur-[100px] rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-5xl md:text-6xl font-black text-white mb-2 tracking-tight">SPEEDRUN <span class="text-transparent bg-clip-text bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">RANKINGS</span></h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">The elite speedrunners of SpyRun. Can you beat the record?</p>
+        </div>
+    </section>
+
+    <!-- Podium Section -->
+    <section class="pb-12 relative z-10">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">SPEEDRUN LEADERBOARD</h1>
-                <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple mx-auto rounded-full"></div>
-                <p class="mt-4 text-gray-400">Top Speedrunners</p>
+            <div id="podium-container" class="flex flex-col md:flex-row justify-center items-end gap-6 mb-16 min-h-[300px]">
+                <!-- Podium items will be injected here -->
+                <div class="w-full text-center text-gray-500 animate-pulse">Loading champions...</div>
             </div>
 
-            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                <table class="w-full text-left">
-                    <thead class="bg-white/5 text-gray-400 uppercase text-xs tracking-widest font-bold">
+            <!-- List Section -->
+            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl backdrop-blur-xl">
+                <div class="px-8 py-5 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                    <h3 class="font-bold text-gray-300 uppercase tracking-wider text-sm">Challengers</h3>
+                    <div class="text-xs text-gray-500">Updating live</div>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-black/20 text-gray-400 uppercase text-xs tracking-widest font-bold">
                         <tr>
-                            <th class="px-8 py-5">Rank</th>
-                            <th class="px-8 py-5">Player</th>
-                            <th class="px-8 py-5">Best Time</th>
+                            <th class="px-6 py-4">Rank</th>
+                            <th class="px-6 py-4">Player</th>
+                            <th class="px-6 py-4 text-right">Time</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body" class="divide-y divide-white/5">
-                        <tr class="hover:bg-white/[0.02] transition-colors">
-                            <td colspan="3" class="px-8 py-6 text-center text-gray-400">Loading leaderboard...</td>
-                        </tr>
+                        <!-- Rows injected here -->
                     </tbody>
                 </table>
             </div>
@@ -106,7 +111,9 @@
         }
 
         async function fetchLeaderboard() {
+            const podiumContainer = document.getElementById('podium-container');
             const tbody = document.getElementById('leaderboard-body');
+            
             try {
                 const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard?select=player_name,score,uuid,discord_handle&order=score.asc&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
@@ -116,42 +123,86 @@
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-gray-400">No runs recorded yet.</td></tr>`;
+                    podiumContainer.innerHTML = `<div class="text-gray-400">No records yet.</div>`;
+                    tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-gray-400">Be the first to run!</td></tr>`;
                     return;
                 }
 
-                tbody.innerHTML = '';
-                data.forEach((player, index) => {
-                    const rank = index + 1;
-                    const rankColor = rank === 1 ? 'text-spy-neon-blue' : (rank === 2 ? 'text-spy-neon-purple' : 'text-gray-400');
-                    const timeColor = rank === 1 ? 'text-spy-neon-purple' : 'text-white';
+                // Split data
+                const top3 = data.slice(0, 3);
+                const rest = data.slice(3);
+
+                // Render Podium
+                podiumContainer.innerHTML = '';
+                
+                // Reorder for visual podium: 2nd, 1st, 3rd
+                const podiumOrder = [1, 0, 2]; 
+                
+                podiumOrder.forEach(idx => {
+                    if (!top3[idx]) return;
+                    const player = top3[idx];
+                    const rank = idx + 1;
                     
-                    let avatarHtml;
-                    if (player.uuid && player.uuid !== 'NULL') {
-                        avatarHtml = `<img src="https://mc-heads.net/avatar/${player.uuid}" class="w-8 h-8 rounded bg-gray-700">`;
-                    } else {
-                        const initial = player.player_name ? player.player_name.substring(0,2).toUpperCase() : '??';
-                        avatarHtml = `<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">${initial}</div>`;
-                    }
+                    // Styles based on rank
+                    let heightClass = rank === 1 ? 'h-64 md:h-80' : (rank === 2 ? 'h-56 md:h-64' : 'h-48 md:h-56');
+                    let colorClass = rank === 1 ? 'border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.2)]' : (rank === 2 ? 'border-gray-300 shadow-[0_0_20px_rgba(209,213,219,0.1)]' : 'border-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.1)]');
+                    let icon = rank === 1 ? '<i class="fas fa-crown text-yellow-400 text-2xl mb-2 animate-bounce"></i>' : (rank === 2 ? '<i class="fas fa-medal text-gray-300 text-xl mb-2"></i>' : '<i class="fas fa-medal text-orange-400 text-xl mb-2"></i>');
+                    let scale = rank === 1 ? 'scale-110 z-10' : 'scale-100 z-0 opacity-90 hover:opacity-100 hover:scale-105';
+                    
+                    const avatarUrl = (player.uuid && player.uuid !== 'NULL') 
+                        ? `https://mc-heads.net/body/${player.uuid}/right` 
+                        : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
+
+                    const html = `
+                        <div class="relative w-full md:w-1/3 flex flex-col items-center justify-end transition-all duration-500 ${scale}">
+                            ${icon}
+                            <div class="w-full ${heightClass} bg-gradient-to-t from-white/10 to-transparent rounded-t-2xl border-x border-t ${colorClass} flex flex-col items-center justify-end p-4 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                                
+                                <!-- Rank Number Background -->
+                                <div class="absolute top-4 font-black text-8xl text-white/5 select-none">${rank}</div>
+
+                                <!-- Avatar -->
+                                <img src="${avatarUrl}" class="h-[80%] object-contain relative z-10 drop-shadow-2xl transition-transform group-hover:scale-110" alt="${player.player_name}">
+                                
+                                <!-- Info -->
+                                <div class="relative z-20 text-center w-full bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 mt-[-20px]">
+                                    <div class="font-bold text-white truncate text-lg">${player.player_name}</div>
+                                    <div class="font-mono text-spy-neon-blue font-bold">${formatTime(player.score)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    podiumContainer.innerHTML += html;
+                });
+
+                // Render List
+                tbody.innerHTML = '';
+                rest.forEach((player, index) => {
+                    const rank = index + 4;
+                    const avatarUrl = (player.uuid && player.uuid !== 'NULL') 
+                        ? `https://mc-heads.net/avatar/${player.uuid}` 
+                        : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
 
                     const row = `
-                        <tr class="hover:bg-white/[0.02] transition-colors animate-fade-in">
-                            <td class="px-8 py-6 font-black ${rankColor}">#${rank}</td>
-                            <td class="px-8 py-6 flex items-center gap-3">
-                                ${avatarHtml}
+                        <tr class="hover:bg-white/[0.05] transition-colors group border-b border-white/5 last:border-0">
+                            <td class="px-6 py-4 font-bold text-gray-500 w-16">#${rank}</td>
+                            <td class="px-6 py-4 flex items-center gap-4">
+                                <img src="${avatarUrl}" class="w-8 h-8 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">
                                 <div>
-                                    <div class="font-bold text-white">${player.player_name}</div>
+                                    <div class="font-bold text-gray-200 group-hover:text-white transition-colors">${player.player_name}</div>
                                     ${player.discord_handle && player.discord_handle !== 'NULL' ? `<div class="text-xs text-gray-500">${player.discord_handle}</div>` : ''}
                                 </div>
                             </td>
-                            <td class="px-8 py-6 font-mono ${timeColor}">${formatTime(player.score)}</td>
+                            <td class="px-6 py-4 text-right font-mono text-spy-neon-blue">${formatTime(player.score)}</td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
                 });
+
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
-                tbody.innerHTML = `<tr><td colspan="3" class="px-8 py-6 text-center text-red-400">Error loading data.</td></tr>`;
+                podiumContainer.innerHTML = `<div class="text-red-400">Failed to load data.</div>`;
             }
         }
         fetchLeaderboard();
