@@ -151,16 +151,25 @@
                     const p1Avatar = match.player1_uuid ? `<img src="https://mc-heads.net/avatar/${match.player1_uuid}" class="w-10 h-10 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
                     const p2Avatar = match.player2_uuid ? `<img src="https://mc-heads.net/avatar/${match.player2_uuid}" class="w-10 h-10 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">` : `<div class="w-10 h-10 bg-gray-700 rounded"></div>`;
 
+                    const p1Loc = match.player1_location ? `<span class="text-xs text-spy-neon-blue font-mono mt-1 block">${match.player1_location}</span>` : '';
+                    const p2Loc = match.player2_location ? `<span class="text-xs text-spy-neon-blue font-mono mt-1 block text-right">${match.player2_location}</span>` : '';
+
                     const card = `
                         <div class="group bg-glass rounded-xl p-6 border ${statusClass} transition-all flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-[0_0_20px_rgba(0,242,255,0.1)]">
                             <div class="flex items-center gap-8 flex-1 w-full justify-center md:justify-start">
                                 <div class="flex items-center gap-3">
                                     ${p1Avatar}
-                                    <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-lg text-white">${match.player1_name || 'Unknown'}</span>
+                                        ${!isEnded ? p1Loc : ''}
+                                    </div>
                                 </div>
                                 <div class="text-gray-500 font-black italic text-xl">VS</div>
                                 <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
+                                    <div class="flex flex-col items-end">
+                                        <span class="font-bold text-lg text-white text-right">${match.player2_name || 'Unknown'}</span>
+                                        ${!isEnded ? p2Loc : ''}
+                                    </div>
                                     ${p2Avatar}
                                 </div>
                             </div>
