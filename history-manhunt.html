@@ -63,17 +63,25 @@
 
     <!-- History Section -->
     <section class="pt-32 pb-20 relative min-h-screen">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Background Effects -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
+            <div class="absolute top-[-10%] left-[20%] w-[30%] h-[30%] bg-spy-neon-blue/10 blur-[100px] rounded-full animate-pulse"></div>
+            <div class="absolute top-[10%] right-[20%] w-[30%] h-[30%] bg-spy-neon-purple/10 blur-[100px] rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16">
                 <div class="inline-flex items-center gap-2 mb-4 px-4 py-1 rounded-full bg-spy-neon-purple/10 border border-spy-neon-purple/20 text-spy-neon-purple font-bold text-sm">
                     <i class="fas fa-running"></i> MANHUNT
                 </div>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">MANHUNT HISTORY</h1>
-                <div class="h-1.5 w-24 bg-gradient-to-r from-spy-neon-purple to-spy-neon-blue mx-auto rounded-full"></div>
-                <p class="mt-4 text-gray-400">Past Manhunt Matches</p>
+                <h1 class="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">MANHUNT <span class="text-transparent bg-clip-text bg-gradient-to-r from-spy-neon-purple to-spy-neon-blue">HISTORY</span></h1>
+                <p class="mt-4 text-gray-400 text-lg">Past Manhunt Matches</p>
             </div>
 
-            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl backdrop-blur-xl">
+                <div class="px-8 py-5 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                    <h3 class="font-bold text-gray-300 uppercase tracking-wider text-sm">Recent Matches</h3>
+                </div>
                 <div class="max-h-[80vh] overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left">
                         <thead class="bg-white/5 text-gray-400 uppercase text-xs tracking-widest font-bold sticky top-0 backdrop-blur-md z-10">
