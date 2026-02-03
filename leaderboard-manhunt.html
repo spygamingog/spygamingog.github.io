@@ -64,33 +64,63 @@
         </div>
     </section>
 
-    <!-- Podium Section -->
-    <section class="pb-12 relative z-10">
+    <!-- Top Runners Section -->
+    <section class="pb-20 relative z-10">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div id="podium-container" class="flex flex-col md:flex-row justify-center items-end gap-6 mb-16 min-h-[300px]">
-                <!-- Podium items will be injected here -->
-                <div class="w-full text-center text-gray-500 animate-pulse">Loading champions...</div>
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px bg-white/10 flex-grow"></div>
+                <h2 class="text-3xl font-black text-white uppercase tracking-wider flex items-center gap-3">
+                    <i class="fas fa-running text-spy-neon-purple"></i> Top Runners
+                </h2>
+                <div class="h-px bg-white/10 flex-grow"></div>
             </div>
 
-            <!-- List Section -->
+            <div id="runners-podium" class="flex flex-col md:flex-row justify-center items-end gap-6 mb-16 min-h-[300px]">
+                <div class="w-full text-center text-gray-500 animate-pulse">Loading runners...</div>
+            </div>
+
             <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl backdrop-blur-xl">
-                <div class="px-8 py-5 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
-                    <h3 class="font-bold text-gray-300 uppercase tracking-wider text-sm">Challengers</h3>
-                    <div class="text-xs text-gray-500">Updating live</div>
-                </div>
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-black/20 text-gray-400 uppercase text-xs tracking-widest font-bold">
                         <tr>
                             <th class="px-6 py-4">Rank</th>
                             <th class="px-6 py-4">Player</th>
-                            <th class="px-6 py-4 text-center">Wins (R)</th>
-                            <th class="px-6 py-4 text-center">Wins (H)</th>
+                            <th class="px-6 py-4 text-center">Runner Wins</th>
                             <th class="px-6 py-4 text-right">Matches</th>
                         </tr>
                     </thead>
-                    <tbody id="leaderboard-body" class="divide-y divide-white/5">
-                        <!-- Rows injected here -->
-                    </tbody>
+                    <tbody id="runners-list" class="divide-y divide-white/5"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Hunters Section -->
+    <section class="pb-20 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px bg-white/10 flex-grow"></div>
+                <h2 class="text-3xl font-black text-white uppercase tracking-wider flex items-center gap-3">
+                    <i class="fas fa-crosshairs text-spy-neon-blue"></i> Top Hunters
+                </h2>
+                <div class="h-px bg-white/10 flex-grow"></div>
+            </div>
+
+            <div id="hunters-podium" class="flex flex-col md:flex-row justify-center items-end gap-6 mb-16 min-h-[300px]">
+                <div class="w-full text-center text-gray-500 animate-pulse">Loading hunters...</div>
+            </div>
+
+            <div class="bg-glass rounded-2xl overflow-hidden border border-white/5 shadow-2xl backdrop-blur-xl">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-black/20 text-gray-400 uppercase text-xs tracking-widest font-bold">
+                        <tr>
+                            <th class="px-6 py-4">Rank</th>
+                            <th class="px-6 py-4">Player</th>
+                            <th class="px-6 py-4 text-center">Hunter Wins</th>
+                            <th class="px-6 py-4 text-right">Matches</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hunters-list" class="divide-y divide-white/5"></tbody>
                 </table>
             </div>
         </div>
@@ -101,11 +131,8 @@
         const supabaseKey = 'sb_publishable_VRpWuaXx5ALKZQjrH9PYMA_hY00aAeT'; 
 
         async function fetchLeaderboard() {
-            const podiumContainer = document.getElementById('podium-container');
-            const tbody = document.getElementById('leaderboard-body');
-            
             try {
-                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard_manhunt?select=*&order=total_matches.desc&limit=100`, {
+                const response = await fetch(`${supabaseUrl}/rest/v1/leaderboard_manhunt?select=*&limit=100`, {
                     headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
                 });
 
@@ -113,97 +140,97 @@
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
-                    podiumContainer.innerHTML = `<div class="text-gray-400">No records yet.</div>`;
-                    tbody.innerHTML = `<tr><td colspan="5" class="px-8 py-6 text-center text-gray-400">Be the first to compete!</td></tr>`;
+                    document.getElementById('runners-podium').innerHTML = `<div class="text-gray-400">No records yet.</div>`;
+                    document.getElementById('hunters-podium').innerHTML = `<div class="text-gray-400">No records yet.</div>`;
                     return;
                 }
 
-                // Sort by total wins (Runner + Hunter)
-                data.sort((a, b) => {
-                    const winsA = (a.wins_runner || 0) + (a.wins_hunter || 0);
-                    const winsB = (b.wins_runner || 0) + (b.wins_hunter || 0);
-                    return winsB - winsA;
-                });
+                // Process Top Runners
+                const runnersData = [...data].sort((a, b) => (b.wins_runner || 0) - (a.wins_runner || 0));
+                renderLeaderboard(runnersData, 'runners-podium', 'runners-list', 'wins_runner', 'Runner Wins', 'spy-neon-purple');
 
-                // Split data
-                const top3 = data.slice(0, 3);
-                const rest = data.slice(3);
-
-                // Render Podium
-                podiumContainer.innerHTML = '';
-                
-                // Reorder for visual podium: 2nd, 1st, 3rd
-                const podiumOrder = [1, 0, 2]; 
-                
-                podiumOrder.forEach(idx => {
-                    if (!top3[idx]) return;
-                    const player = top3[idx];
-                    const rank = idx + 1;
-                    const totalWins = (player.wins_runner || 0) + (player.wins_hunter || 0);
-                    
-                    // Styles based on rank
-                    let heightClass = rank === 1 ? 'h-64 md:h-80' : (rank === 2 ? 'h-56 md:h-64' : 'h-48 md:h-56');
-                    let colorClass = rank === 1 ? 'border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.2)]' : (rank === 2 ? 'border-gray-300 shadow-[0_0_20px_rgba(209,213,219,0.1)]' : 'border-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.1)]');
-                    let icon = rank === 1 ? '<i class="fas fa-crown text-yellow-400 text-2xl mb-2 animate-bounce"></i>' : (rank === 2 ? '<i class="fas fa-medal text-gray-300 text-xl mb-2"></i>' : '<i class="fas fa-medal text-orange-400 text-xl mb-2"></i>');
-                    let scale = rank === 1 ? 'scale-110 z-10' : 'scale-100 z-0 opacity-90 hover:opacity-100 hover:scale-105';
-                    
-                    const avatarUrl = (player.player_uuid && player.player_uuid !== 'NULL') 
-                        ? `https://mc-heads.net/body/${player.player_uuid}/right` 
-                        : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
-
-                    const html = `
-                        <div class="relative w-full md:w-1/3 flex flex-col items-center justify-end transition-all duration-500 ${scale}">
-                            ${icon}
-                            <div class="w-full ${heightClass} bg-gradient-to-t from-white/10 to-transparent rounded-t-2xl border-x border-t ${colorClass} flex flex-col items-center justify-end p-4 relative overflow-hidden group">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                                
-                                <!-- Rank Number Background -->
-                                <div class="absolute top-4 font-black text-8xl text-white/5 select-none">${rank}</div>
-
-                                <!-- Avatar -->
-                                <img src="${avatarUrl}" class="h-[80%] object-contain relative z-10 drop-shadow-2xl transition-transform group-hover:scale-110" alt="${player.player_name}">
-                                
-                                <!-- Info -->
-                                <div class="relative z-20 text-center w-full bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 mt-[-20px]">
-                                    <div class="font-bold text-white truncate text-lg">${player.player_name}</div>
-                                    <div class="font-bold text-spy-neon-purple">${totalWins} Wins</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    podiumContainer.innerHTML += html;
-                });
-
-                // Render List
-                tbody.innerHTML = '';
-                rest.forEach((player, index) => {
-                    const rank = index + 4;
-                    const avatarUrl = (player.player_uuid && player.player_uuid !== 'NULL') 
-                        ? `https://mc-heads.net/avatar/${player.player_uuid}` 
-                        : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
-
-                    const row = `
-                        <tr class="hover:bg-white/[0.05] transition-colors group border-b border-white/5 last:border-0">
-                            <td class="px-6 py-4 font-bold text-gray-500 w-16">#${rank}</td>
-                            <td class="px-6 py-4 flex items-center gap-4">
-                                <img src="${avatarUrl}" class="w-8 h-8 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">
-                                <div>
-                                    <div class="font-bold text-gray-200 group-hover:text-white transition-colors">${player.player_name}</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center font-bold text-spy-neon-purple">${player.wins_runner || 0}</td>
-                            <td class="px-6 py-4 text-center font-bold text-spy-neon-blue">${player.wins_hunter || 0}</td>
-                            <td class="px-6 py-4 text-right font-mono text-gray-400">${player.total_matches || 0}</td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
+                // Process Top Hunters
+                const huntersData = [...data].sort((a, b) => (b.wins_hunter || 0) - (a.wins_hunter || 0));
+                renderLeaderboard(huntersData, 'hunters-podium', 'hunters-list', 'wins_hunter', 'Hunter Wins', 'spy-neon-blue');
 
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
-                podiumContainer.innerHTML = `<div class="text-red-400">Failed to load data.</div>`;
             }
         }
+
+        function renderLeaderboard(data, podiumId, listId, scoreKey, scoreLabel, themeColor) {
+            const podiumContainer = document.getElementById(podiumId);
+            const listBody = document.getElementById(listId);
+            
+            // Top 3 for Podium
+            const top3 = data.slice(0, 3);
+            const rest = data.slice(3, 13); // Show top 10 in list after podium, or more? existing code showed all. Let's show top 20 total.
+
+            // Render Podium
+            podiumContainer.innerHTML = '';
+            const podiumOrder = [1, 0, 2];
+            
+            podiumOrder.forEach(idx => {
+                if (!top3[idx]) return;
+                const player = top3[idx];
+                const rank = idx + 1;
+                const score = player[scoreKey] || 0;
+                
+                // Styling
+                let heightClass = rank === 1 ? 'h-64 md:h-80' : (rank === 2 ? 'h-56 md:h-64' : 'h-48 md:h-56');
+                let borderClass = rank === 1 ? 'border-yellow-400' : (rank === 2 ? 'border-gray-300' : 'border-orange-400');
+                let shadowClass = rank === 1 ? 'shadow-[0_0_30px_rgba(250,204,21,0.2)]' : (rank === 2 ? 'shadow-[0_0_20px_rgba(209,213,219,0.1)]' : 'shadow-[0_0_20px_rgba(251,146,60,0.1)]');
+                let iconColor = rank === 1 ? 'text-yellow-400' : (rank === 2 ? 'text-gray-300' : 'text-orange-400');
+                let iconClass = rank === 1 ? 'fa-crown animate-bounce' : 'fa-medal';
+                let scale = rank === 1 ? 'scale-110 z-10' : 'scale-100 z-0 opacity-90 hover:opacity-100 hover:scale-105';
+                
+                const avatarUrl = (player.player_uuid && player.player_uuid !== 'NULL') 
+                    ? `https://mc-heads.net/body/${player.player_uuid}/right` 
+                    : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
+
+                const html = `
+                    <div class="relative w-full md:w-1/3 flex flex-col items-center justify-end transition-all duration-500 ${scale}">
+                        <i class="fas ${iconClass} ${iconColor} text-2xl mb-2"></i>
+                        <div class="w-full ${heightClass} bg-gradient-to-t from-white/10 to-transparent rounded-t-2xl border-x border-t ${borderClass} ${shadowClass} flex flex-col items-center justify-end p-4 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                            <div class="absolute top-4 font-black text-8xl text-white/5 select-none">${rank}</div>
+                            <img src="${avatarUrl}" class="h-[80%] object-contain relative z-10 drop-shadow-2xl transition-transform group-hover:scale-110" alt="${player.player_name}">
+                            <div class="relative z-20 text-center w-full bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 mt-[-20px]">
+                                <div class="font-bold text-white truncate text-lg">${player.player_name}</div>
+                                <div class="font-bold text-${themeColor}">${score} Wins</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                podiumContainer.innerHTML += html;
+            });
+
+            // Render List
+            listBody.innerHTML = '';
+            rest.forEach((player, index) => {
+                const rank = index + 4;
+                const score = player[scoreKey] || 0;
+                const avatarUrl = (player.player_uuid && player.player_uuid !== 'NULL') 
+                    ? `https://mc-heads.net/avatar/${player.player_uuid}` 
+                    : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
+
+                const row = `
+                    <tr class="hover:bg-white/[0.05] transition-colors group border-b border-white/5 last:border-0">
+                        <td class="px-6 py-4 font-bold text-gray-500 w-16">#${rank}</td>
+                        <td class="px-6 py-4 flex items-center gap-4">
+                            <img src="${avatarUrl}" class="w-8 h-8 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">
+                            <div>
+                                <div class="font-bold text-gray-200 group-hover:text-white transition-colors">${player.player_name}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold text-${themeColor}">${score}</td>
+                        <td class="px-6 py-4 text-right font-mono text-gray-400">${player.total_matches || 0}</td>
+                    </tr>
+                `;
+                listBody.innerHTML += row;
+            });
+        }
+
         fetchLeaderboard();
     </script>
 </body>
