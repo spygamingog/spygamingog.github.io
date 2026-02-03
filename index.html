@@ -200,5 +200,15 @@
         </div>
     </footer>
 
+    <script>
+        // Secret Admin Access (Press Ctrl+Alt+L)
+        document.addEventListener('keydown', (e) => {
+            // Check for Ctrl + Alt + L (using code to be layout independent and case-insensitive)
+            if (e.ctrlKey && e.altKey && (e.key === 'l' || e.key === 'L' || e.code === 'KeyL')) {
+                e.preventDefault(); // Prevent default browser action if any
+                window.location.href = 'admin.html';
+            }
+        });
+    </script>
 </body>
 </html>

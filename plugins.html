@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpyRun | Plugins & Tools</title>
+    <title>Plugins & Tools | SpyRun</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <script>
         tailwind.config = {
             theme: {
@@ -17,49 +17,73 @@
                         'spy-neon-blue': '#00f2ff',
                         'spy-neon-purple': '#bc13fe',
                         'spy-gray': '#1a1a1e',
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-spy-dark text-gray-200 font-sans antialiased">
+<body class="bg-spy-dark text-gray-200 font-sans antialiased selection:bg-spy-neon-blue selection:text-black">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-spy-dark/80 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(0,242,255,0.3)] group-hover:shadow-[0_0_25px_rgba(188,19,254,0.5)] transition-all">
                         <i class="fas fa-user-secret text-white text-xl"></i>
                     </div>
-                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+                    <span class="text-2xl font-extrabold tracking-tighter text-white">SPY<span class="text-spy-neon-blue group-hover:text-spy-neon-purple transition-colors">RUN</span></span>
                 </a>
+                
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium">Home</a>
-                    <a href="speedrun.html" class="hover:text-spy-neon-blue transition-colors font-medium">Speedrun</a>
-                    <a href="manhunt.html" class="hover:text-spy-neon-purple transition-colors font-medium">Manhunt</a>
-                    <a href="plugins.html" class="text-spy-neon-blue font-medium">Plugins</a>
-                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-spy-gray hover:bg-spy-gray/80 rounded-full border border-white/10 flex items-center gap-2 transition-all">
-                        <i class="fab fa-discord text-[#5865F2]"></i>
+                    <a href="index.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Home</a>
+                    <a href="index.html#speedrun" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Speedrun</a>
+                    <a href="index.html#manhunt" class="hover:text-spy-neon-purple transition-colors font-medium text-sm uppercase tracking-wide">Manhunt</a>
+                    <a href="leaderboard.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">Leaderboard</a>
+                    <a href="history.html" class="hover:text-spy-neon-blue transition-colors font-medium text-sm uppercase tracking-wide">History</a>
+                    <a href="plugins.html" class="text-spy-neon-blue font-bold text-sm uppercase tracking-wide border-b-2 border-spy-neon-blue pb-1">Plugins</a>
+                    <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 flex items-center gap-2 transition-all hover:scale-105 group">
+                        <i class="fab fa-discord text-[#5865F2] group-hover:animate-bounce"></i>
                         <span>Discord</span>
                     </a>
                 </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-spy-neon-blue focus:outline-none transition-colors p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-spy-dark/95 backdrop-blur-xl border-b border-white/5 absolute w-full left-0 top-20 z-40">
+            <div class="px-4 pt-4 pb-6 space-y-4 flex flex-col">
+                <a href="index.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors font-medium">Home</a>
+                <a href="index.html#speedrun" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors font-medium">Speedrun</a>
+                <a href="index.html#manhunt" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors font-medium">Manhunt</a>
+                <a href="leaderboard.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors font-medium">Leaderboard</a>
+                <a href="history.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors font-medium">History</a>
+                <a href="plugins.html" class="block px-4 py-3 rounded-lg bg-spy-neon-blue/10 text-spy-neon-blue border border-spy-neon-blue/20 font-bold">Plugins</a>
+                <a href="https://discord.gg/KXCuuSpBzW" target="_blank" class="block px-4 py-3 rounded-lg bg-[#5865F2]/20 text-white border border-[#5865F2]/30 flex items-center gap-2 justify-center">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Header -->
     <section class="pt-32 pb-16 relative overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-20">
-            <div class="absolute top-0 left-[20%] w-[30%] h-[30%] bg-spy-neon-blue blur-[100px] rounded-full"></div>
-            <div class="absolute bottom-0 right-[20%] w-[30%] h-[30%] bg-spy-neon-purple blur-[100px] rounded-full"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+            <div class="absolute top-[-10%] left-[20%] w-[30%] h-[30%] bg-spy-neon-blue/10 blur-[100px] rounded-full animate-pulse"></div>
+            <div class="absolute bottom-[10%] right-[20%] w-[30%] h-[30%] bg-spy-neon-purple/10 blur-[100px] rounded-full animate-pulse" style="animation-delay: 1.5s;"></div>
         </div>
+        
         <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
-            <h1 class="text-5xl font-black text-white mb-6">OUR ECOSYSTEM</h1>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">OUR <span class="text-transparent bg-clip-text bg-gradient-to-r from-spy-neon-blue to-spy-neon-purple">ECOSYSTEM</span></h1>
             <p class="text-xl text-gray-400 max-w-2xl mx-auto">
                 Powering the next generation of competitive Minecraft with cutting-edge plugins and mods.
             </p>
@@ -67,102 +91,86 @@
     </section>
 
     <!-- Plugins Grid -->
-    <section class="pb-20">
+    <section class="pb-20 relative z-10 min-h-[50vh]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <!-- SpyRun Core -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-blue transition-all group relative overflow-hidden">
-                    <div class="w-16 h-16 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-3xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-glass rounded-2xl p-8 hover:border-spy-neon-blue transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div class="w-16 h-16 bg-spy-neon-blue/10 rounded-xl flex items-center justify-center text-spy-neon-blue text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,242,255,0.2)]">
                         <i class="fas fa-stopwatch"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-3">SpyRun Core</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">The engine behind the speedrunning platform. Handles matchmaking, timing, and world generation.</p>
+                    <p class="text-gray-400 mb-6 flex-grow">The engine behind the speedrunning platform. Handles matchmaking, timing, and world generation.</p>
                     <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Spigot 1.21</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Fabric Client</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Spigot 1.21</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Fabric Client</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:bg-white transition-colors">
+                    <a href="#" class="block w-full py-3 bg-spy-neon-blue text-black font-bold text-center rounded-lg hover:shadow-[0_0_20px_rgba(0,242,255,0.4)] transition-all">
                         View Details
                     </a>
                 </div>
 
                 <!-- SpySpectator -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-spy-neon-purple transition-all group">
-                    <div class="w-16 h-16 bg-spy-neon-purple/10 rounded-xl flex items-center justify-center text-spy-neon-purple text-3xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-glass rounded-2xl p-8 hover:border-spy-neon-purple transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div class="w-16 h-16 bg-spy-neon-purple/10 rounded-xl flex items-center justify-center text-spy-neon-purple text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(188,19,254,0.2)]">
                         <i class="fas fa-eye"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-3">SpySpectator</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">Advanced spectator mode with first-person view, inventory inspection, and teleport menu.</p>
+                    <p class="text-gray-400 mb-6 flex-grow">Advanced spectator mode with first-person view, inventory inspection, and teleport menu.</p>
                     <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Utility</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Moderation</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Utility</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Moderation</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                    <a href="#" class="block w-full py-3 bg-white/5 text-white font-bold text-center rounded-lg hover:bg-white/10 border border-white/10 transition-colors">
                         View Details
                     </a>
                 </div>
 
                 <!-- SpyBedWars -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-red-500 transition-all group">
-                    <div class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-glass rounded-2xl p-8 hover:border-red-500 transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(239,68,68,0.2)]">
                         <i class="fas fa-bed"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-3">SpyBedWars</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">Competitive BedWars implementation with custom shop items, team upgrades, and map reset system.</p>
+                    <p class="text-gray-400 mb-6 flex-grow">Competitive BedWars implementation with custom shop items, team upgrades, and map reset system.</p>
                     <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Minigame</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Multi-Arena</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Minigame</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Multi-Arena</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                    <a href="#" class="block w-full py-3 bg-white/5 text-white font-bold text-center rounded-lg hover:bg-white/10 border border-white/10 transition-colors">
                         View Details
                     </a>
                 </div>
 
                 <!-- SpyHunts -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-green-500 transition-all group">
-                    <div class="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-glass rounded-2xl p-8 hover:border-green-500 transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div class="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.2)]">
                         <i class="fas fa-compass"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-3">SpyHunts</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">Manhunt gamemode automation. Includes tracking compasses, role assignment, and win condition detection.</p>
+                    <p class="text-gray-400 mb-6 flex-grow">Manhunt gamemode automation. Includes tracking compasses, role assignment, and win condition detection.</p>
                     <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Manhunt</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Tracking</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Manhunt</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Tracking</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                    <a href="#" class="block w-full py-3 bg-white/5 text-white font-bold text-center rounded-lg hover:bg-white/10 border border-white/10 transition-colors">
                         View Details
                     </a>
                 </div>
 
                 <!-- SpyNPCs -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-yellow-500 transition-all group">
-                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="bg-glass rounded-2xl p-8 hover:border-yellow-500 transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                         <i class="fas fa-user-friends"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-3">SpyNPCs</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">Lightweight NPC management for server lobbies. Supports skins, holograms, and command binding.</p>
+                    <p class="text-gray-400 mb-6 flex-grow">Lightweight NPC management for server lobbies. Supports skins, holograms, and command binding.</p>
                     <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Utility</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Lobby</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Utility</span>
+                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 border border-white/5">Lobby</span>
                     </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
-                        View Details
-                    </a>
-                </div>
-
-                <!-- SpyNetherPortals -->
-                <div class="bg-spy-gray rounded-2xl border border-white/10 p-8 hover:border-orange-500 transition-all group">
-                    <div class="w-16 h-16 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-dungeon"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">SpyNetherPortals</h3>
-                    <p class="text-gray-400 mb-6 min-h-[80px]">Advanced portal linking for multi-world setups. Handles 1:8 coordinate scaling and custom destinations.</p>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">Mechanic</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300">World</span>
-                    </div>
-                    <a href="#" class="block w-full py-3 bg-white/10 text-white font-bold text-center rounded-lg hover:bg-white/20 transition-colors">
+                    <a href="#" class="block w-full py-3 bg-white/5 text-white font-bold text-center rounded-lg hover:bg-white/10 border border-white/10 transition-colors">
                         View Details
                     </a>
                 </div>
@@ -171,5 +179,48 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-black/40 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-spy-neon-blue to-spy-neon-purple rounded flex items-center justify-center">
+                    <i class="fas fa-user-secret text-white text-xs"></i>
+                </div>
+                <span class="font-bold text-white">SPY<span class="text-spy-neon-blue">RUN</span></span>
+            </div>
+            <div class="text-gray-500 text-sm">
+                &copy; 2024 SpyRun Network. Not affiliated with Mojang AB.
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-spy-neon-blue hover:text-black transition-all">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#5865F2] hover:text-white transition-all">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const icon = btn.querySelector('i');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+    </script>
 </body>
 </html>
