@@ -374,7 +374,7 @@
                 let params = [];
 
                 if (currentMode === 'manhunt') {
-                     params.push('select=*,match_participants_manhunt(*)');
+                     params.push('select=*,matches_participants_manhunt(*)');
                      params.push('order=start_time.desc');
                      
                      // Filter based on tab
@@ -415,9 +415,9 @@
 
                     if (currentMode === 'manhunt') {
                         // Manhunt Logic
-                        const participants = match.match_participants_manhunt || [];
-                        const runners = participants.filter(p => p.team === 'runner').map(p => p.player_name).join(', ');
-                        const hunters = participants.filter(p => p.team === 'hunter').map(p => p.player_name).join(', ');
+                        const participants = match.matches_participants_manhunt || [];
+                        const runners = participants.filter(p => p.team_role === 'runner').map(p => p.player_name).join(', ');
+                        const hunters = participants.filter(p => p.team_role === 'hunter').map(p => p.player_name).join(', ');
                         matchupText = `<span class="text-green-400">${runners || 'Unknown'}</span> <span class="text-gray-500 text-xs">vs</span> <span class="text-red-400">${hunters || 'Unknown'}</span>`;
                         
                         // Check both fields for compatibility
@@ -450,7 +450,7 @@
                 });
             } catch (e) { 
                 console.error(e); 
-                document.getElementById('matches-tbody').innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-400">Error: Table '${matchesTable}' not found (DB not connected yet).</td></tr>`;
+                document.getElementById('matches-tbody').innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-400">Error: ${e.message}</td></tr>`;
             }
         }
 
