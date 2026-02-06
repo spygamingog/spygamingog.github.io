@@ -67,7 +67,8 @@
                 </div>
                 <div class="flex bg-spy-gray rounded-lg p-1 border border-white/10">
                     <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="px-4 py-2 rounded text-sm font-bold bg-spy-neon-blue text-black transition-all">Leaderboard</button>
-                    <button onclick="switchTab('matches')" id="tab-matches" class="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all">Matches</button>
+                    <button onclick="switchTab('live')" id="tab-live" class="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all">Live Matches</button>
+                    <button onclick="switchTab('history')" id="tab-history" class="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all">History</button>
                 </div>
             </div>
             <div class="flex gap-4">
@@ -198,6 +199,7 @@
 
         // --- State ---
         let currentMode = 'speedrun';
+        let currentTab = 'leaderboard';
         let leaderboardTable = 'leaderboard';
         let matchesTable = 'matches';
 
@@ -205,8 +207,8 @@
         if (sessionStorage.getItem('spy_admin_auth') === 'true') {
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');
-            loadLeaderboard();
-            loadMatches();
+            if(currentTab === 'leaderboard') loadLeaderboard();
+            else loadMatches();
         }
 
         document.getElementById('login-form').addEventListener('submit', (e) => {
@@ -238,19 +240,29 @@
                 document.getElementById('mode-speedrun').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
                 document.getElementById('mode-manhunt').className = "px-4 py-2 rounded text-sm font-bold bg-spy-neon-purple text-black transition-all";
             }
-            loadLeaderboard();
-            loadMatches();
+            // Update tab color
+            switchTab(currentTab);
         }
 
         function switchTab(tab) {
+            currentTab = tab;
             document.getElementById('section-leaderboard').classList.add('hidden');
             document.getElementById('section-matches').classList.add('hidden');
+            
             document.getElementById('tab-leaderboard').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
-            document.getElementById('tab-matches').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
+            document.getElementById('tab-live').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
+            document.getElementById('tab-history').className = "px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white transition-all";
 
-            document.getElementById('section-' + tab).classList.remove('hidden');
             const activeColor = currentMode === 'speedrun' ? 'bg-spy-neon-blue' : 'bg-spy-neon-purple';
             document.getElementById('tab-' + tab).className = `px-4 py-2 rounded text-sm font-bold ${activeColor} text-black transition-all`;
+
+            if (tab === 'leaderboard') {
+                document.getElementById('section-leaderboard').classList.remove('hidden');
+                loadLeaderboard();
+            } else {
+                document.getElementById('section-matches').classList.remove('hidden');
+                loadMatches();
+            }
         }
 
         // --- Helpers ---
@@ -358,10 +370,32 @@
         let matchData = [];
         async function loadMatches() {
             try {
-                let url = `${supabaseUrl}/rest/v1/${matchesTable}?select=*&order=start_time.desc`;
+                let url = `${supabaseUrl}/rest/v1/${matchesTable}`;
+                let params = [];
+
                 if (currentMode === 'manhunt') {
-                     url = `${supabaseUrl}/rest/v1/${matchesTable}?select=*,match_participants_manhunt(*)&order=start_time.desc`;
+                     params.push('select=*,match_participants_manhunt(*)');
+                     params.push('order=start_time.desc');
+                     
+                     // Filter based on tab
+                     if (currentTab === 'live') {
+                         params.push('winning_team=is.null');
+                     } else if (currentTab === 'history') {
+                         params.push('winning_team=not.is.null');
+                     }
+                } else {
+                     params.push('select=*');
+                     params.push('order=start_time.desc');
+
+                     // Filter based on tab
+                     if (currentTab === 'live') {
+                         params.push('winner_uuid=is.null');
+                     } else if (currentTab === 'history') {
+                         params.push('winner_uuid=not.is.null');
+                     }
                 }
+                
+                url += '?' + params.join('&');
 
                 const res = await fetch(url, { headers: getHeaders() });
                 if (!res.ok) throw new Error("Failed to load or table does not exist");
@@ -370,7 +404,7 @@
                 tbody.innerHTML = '';
                 
                 if (matchData.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No data found for ${currentMode}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No ${currentTab === 'live' ? 'active' : 'history'} data found for ${currentMode}</td></tr>`;
                     return;
                 }
 
@@ -386,9 +420,12 @@
                         const hunters = participants.filter(p => p.team === 'hunter').map(p => p.player_name).join(', ');
                         matchupText = `<span class="text-green-400">${runners || 'Unknown'}</span> <span class="text-gray-500 text-xs">vs</span> <span class="text-red-400">${hunters || 'Unknown'}</span>`;
                         
-                        if (match.winner_team) {
-                             const color = match.winner_team === 'runners' ? 'text-green-400' : 'text-red-400';
-                             winnerText = `<span class="${color} font-bold capitalize">${match.winner_team}</span>`;
+                        // Check both fields for compatibility
+                        const winner = match.winning_team || match.winner_team;
+                        
+                        if (winner) {
+                             const color = winner === 'runners' || winner === 'runner' ? 'text-green-400' : 'text-red-400';
+                             winnerText = `<span class="${color} font-bold capitalize">${winner}</span>`;
                         } else {
                              winnerText = `<span class="text-red-400 italic">Live</span>`;
                         }
