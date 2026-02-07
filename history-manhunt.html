@@ -164,8 +164,13 @@
                     const runners = participants.filter(p => p.team_role === 'runner').map(p => p.player_name).join(', ');
                     const hunters = participants.filter(p => p.team_role === 'hunter').map(p => p.player_name).join(', ');
                     
-                    const winnerText = match.winning_team === 'runner' ? 'Runners' : 'Hunters';
-                    const winnerColor = match.winning_team === 'runner' ? 'text-spy-neon-purple' : 'text-spy-neon-blue';
+                    let winnerText = match.winning_team === 'runner' ? 'Runners' : 'Hunters';
+                    let winnerColor = match.winning_team === 'runner' ? 'text-spy-neon-purple' : 'text-spy-neon-blue';
+                    
+                    if (match.winning_team === 'Quitted') {
+                        winnerText = 'Quitted';
+                        winnerColor = 'text-gray-500';
+                    }
 
                     const row = `
                         <tr class="hover:bg-white/[0.02] transition-colors">

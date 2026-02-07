@@ -116,7 +116,7 @@
                         <tr>
                             <th class="px-6 py-4">Rank</th>
                             <th class="px-6 py-4">Player</th>
-                            <th class="px-6 py-4 text-center">Hunter Wins</th>
+                            <th class="px-6 py-4 text-center">Runner Kills</th>
                             <th class="px-6 py-4 text-right">Matches</th>
                         </tr>
                     </thead>
@@ -150,8 +150,8 @@
                 renderLeaderboard(runnersData, 'runners-podium', 'runners-list', 'wins_runner', 'Runner Wins', 'spy-neon-purple');
 
                 // Process Top Hunters
-                const huntersData = [...data].sort((a, b) => (b.wins_hunter || 0) - (a.wins_hunter || 0));
-                renderLeaderboard(huntersData, 'hunters-podium', 'hunters-list', 'wins_hunter', 'Hunter Wins', 'spy-neon-blue');
+                const huntersData = [...data].sort((a, b) => (b.runner_kills || 0) - (a.runner_kills || 0));
+                renderLeaderboard(huntersData, 'hunters-podium', 'hunters-list', 'runner_kills', 'Runner Kills', 'spy-neon-blue');
 
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
@@ -197,37 +197,37 @@
                             <img src="${avatarUrl}" class="h-[80%] object-contain relative z-10 drop-shadow-2xl transition-transform group-hover:scale-110" alt="${player.player_name}">
                             <div class="relative z-20 text-center w-full bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 mt-[-20px]">
                                 <div class="font-bold text-white truncate text-lg">${player.player_name}</div>
-                                <div class="font-bold text-${themeColor}">${score} Wins</div>
+                                <div class="font-bold text-${themeColor}">${score} ${scoreLabel}</div>
                             </div>
                         </div>
                     </div>
                 `;
+                
                 podiumContainer.innerHTML += html;
             });
 
-            // Render List
+            // Render List (Top 20)
             listBody.innerHTML = '';
-            rest.forEach((player, index) => {
+            // Only show top 20 total, or rest? existing code just sliced "rest". 
+            // Let's show up to rank 20.
+            const listData = data.slice(3, 20); 
+            
+            listData.forEach((player, index) => {
                 const rank = index + 4;
                 const score = player[scoreKey] || 0;
-                const avatarUrl = (player.player_uuid && player.player_uuid !== 'NULL') 
-                    ? `https://mc-heads.net/avatar/${player.player_uuid}` 
-                    : `https://ui-avatars.com/api/?name=${player.player_name}&background=random`;
-
-                const row = `
-                    <tr class="hover:bg-white/[0.05] transition-colors group border-b border-white/5 last:border-0">
-                        <td class="px-6 py-4 font-bold text-gray-500 w-16">#${rank}</td>
-                        <td class="px-6 py-4 flex items-center gap-4">
-                            <img src="${avatarUrl}" class="w-8 h-8 rounded bg-gray-700 shadow-sm group-hover:scale-110 transition-transform">
-                            <div>
-                                <div class="font-bold text-gray-200 group-hover:text-white transition-colors">${player.player_name}</div>
-                            </div>
+                
+                const html = `
+                    <tr class="hover:bg-white/5 transition-colors group">
+                        <td class="px-6 py-4 font-bold text-gray-500 group-hover:text-white transition-colors">#${rank}</td>
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <img src="https://mc-heads.net/avatar/${player.player_uuid}/32" class="w-8 h-8 rounded-md" onerror="this.src='https://ui-avatars.com/api/?name=${player.player_name}&background=random'">
+                            <span class="font-bold text-gray-300 group-hover:text-white transition-colors">${player.player_name}</span>
                         </td>
                         <td class="px-6 py-4 text-center font-bold text-${themeColor}">${score}</td>
-                        <td class="px-6 py-4 text-right font-mono text-gray-400">${player.total_matches || 0}</td>
+                        <td class="px-6 py-4 text-right text-gray-400">${player.total_matches || 0}</td>
                     </tr>
                 `;
-                listBody.innerHTML += row;
+                listBody.innerHTML += html;
             });
         }
 
