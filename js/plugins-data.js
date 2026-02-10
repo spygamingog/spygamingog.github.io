@@ -1,10 +1,10 @@
 /**
- * Dynamically fetches all repositories from the SpyGamingOG GitHub account
+ * Dynamically fetches all repositories from the spygamingog GitHub account
  * and filters them by the 'minecraft-plugins' topic.
  */
 async function fetchPluginsFromGithub() {
     try {
-        const username = 'SpyGamingOG';
+        const username = 'spygamingog';
         const response = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
         if (!response.ok) throw new Error('Failed to fetch GitHub repositories');
         
@@ -78,7 +78,7 @@ async function fetchModrinthData(projectId) {
 
 async function fetchGithubData(repo) {
     try {
-        const response = await fetch(`https://api.github.com/repos/SpyGamingOG/${repo}`);
+        const response = await fetch(`https://api.github.com/repos/spygamingog/${repo}`);
         if (!response.ok) return null;
         return await response.json();
     } catch (error) {
