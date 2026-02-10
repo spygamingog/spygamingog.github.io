@@ -1,6 +1,6 @@
 /**
  * Dynamically fetches all repositories from the spygamingog GitHub account
- * and filters them by the 'minecraft-plugins' topic.
+ * and filters them by the 'minecraft-plugin' topic.
  */
 async function fetchPluginsFromGithub() {
     try {
@@ -10,9 +10,9 @@ async function fetchPluginsFromGithub() {
         
         const repos = await response.json();
         
-        // Filter repositories that have the 'minecraft-plugins' topic
+        // Filter repositories that have the 'minecraft-plugin' topic
         const filteredRepos = repos.filter(repo => 
-            repo.topics && repo.topics.includes('minecraft-plugins')
+            repo.topics && repo.topics.includes('minecraft-plugin')
         );
 
         // Map GitHub repos to our plugin structure
@@ -24,7 +24,7 @@ async function fetchPluginsFromGithub() {
             color: getColorForRepo(repo.name),
             modrinthId: repo.name.toLowerCase(), // Assuming Modrinth slug matches repo name
             githubRepo: repo.name,
-            tags: repo.topics.filter(t => t !== 'minecraft-plugins').map(t => t.charAt(0).toUpperCase() + t.slice(1)),
+            tags: repo.topics.filter(t => t !== 'minecraft-plugin').map(t => t.charAt(0).toUpperCase() + t.slice(1)),
             stars: repo.stargazers_count,
             language: repo.language
         }));
