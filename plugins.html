@@ -167,10 +167,35 @@
             }
         });
 
+        // Global state for fetched plugins
+        let currentPlugins = [];
+
         // Dynamic Grid Generation
-        function renderPlugins() {
+        async function renderPlugins() {
             const grid = document.getElementById('plugins-grid');
-            grid.innerHTML = pluginsData.map(plugin => `
+            
+            // Show loading skeleton or spinner
+            grid.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-20">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-spy-neon-blue mb-4"></div>
+                    <p class="text-gray-400 font-mono animate-pulse">FETCHING MINECRAFT PLUGINS...</p>
+                </div>
+            `;
+
+            currentPlugins = await fetchPluginsFromGithub();
+
+            if (currentPlugins.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-white/5 rounded-3xl border border-white/10">
+                        <i class="fas fa-search text-5xl text-gray-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-white mb-2">No Plugins Found</h3>
+                        <p class="text-gray-400">We couldn't find any repositories with the 'minecraft-plugins' topic.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = currentPlugins.map(plugin => `
                 <div class="bg-glass rounded-2xl p-8 hover:border-${plugin.color} border border-white/5 transition-all group relative overflow-hidden flex flex-col h-full cursor-pointer" onclick="openModal('${plugin.id}')">
                     <div class="w-16 h-16 bg-${plugin.color}/10 rounded-xl flex items-center justify-center text-${plugin.color} text-3xl mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,0,0,0.2)]">
                         <i class="${plugin.icon}"></i>
@@ -188,7 +213,7 @@
         }
 
         async function openModal(id) {
-            const plugin = pluginsData.find(p => p.id === id);
+            const plugin = currentPlugins.find(p => p.id === id);
             const modal = document.getElementById('plugin-modal');
             const content = document.getElementById('modal-content');
             
@@ -201,17 +226,15 @@
                 </div>
             `;
 
-            const [modrinth, github] = await Promise.all([
-                fetchModrinthData(plugin.modrinthId),
-                fetchGithubData(plugin.githubRepo)
-            ]);
+            const modrinth = await fetchModrinthData(plugin.modrinthId);
+            const github = await fetchGithubData(plugin.githubRepo);
 
             content.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-8 items-start mb-10">
                     <div class="w-24 h-24 bg-${plugin.color}/10 rounded-3xl flex items-center justify-center text-${plugin.color} text-5xl shrink-0 shadow-2xl">
                         <i class="${plugin.icon}"></i>
                     </div>
-                    <div>
+                    <div class="flex-grow">
                         <div class="flex flex-wrap items-center gap-3 mb-2">
                             <h2 class="text-4xl font-black text-white">${plugin.name}</h2>
                             <span class="px-3 py-1 bg-spy-neon-blue/10 text-spy-neon-blue text-xs font-bold rounded-full border border-spy-neon-blue/20 uppercase tracking-widest">v${modrinth?.latest_version || '1.0.0'}</span>
@@ -231,26 +254,33 @@
                     </div>
                     <div class="bg-white/5 border border-white/5 rounded-2xl p-6 text-center group hover:border-green-500 transition-colors">
                         <div class="text-gray-500 text-xs uppercase tracking-widest mb-2">GitHub Stars</div>
-                        <div class="text-3xl font-black text-white group-hover:text-green-500 transition-colors">${github?.stargazers_count || '---'}</div>
+                        <div class="text-3xl font-black text-white group-hover:text-green-500 transition-colors">${github?.stargazers_count || plugin.stars || '---'}</div>
                     </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-10">
                     <div>
                         <h4 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
-                            <i class="fas fa-list-ul text-spy-neon-blue"></i> Key Features
+                            <i class="fas fa-list-ul text-spy-neon-blue"></i> Information
                         </h4>
-                        <ul class="space-y-3">
-                            ${(plugin.features || ["Advanced Logic", "High Performance", "Customizable", "Easy Setup"]).map(f => `
-                                <li class="flex items-center gap-3 text-gray-400">
-                                    <i class="fas fa-check text-spy-neon-blue text-xs"></i>
-                                    ${f}
-                                </li>
-                            `).join('')}
-                        </ul>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">Language</span>
+                                <span class="text-white font-mono">${github?.language || plugin.language || 'Java'}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">License</span>
+                                <span class="text-white font-mono">${github?.license?.spdx_id || 'MIT'}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">Last Update</span>
+                                <span class="text-white font-mono">${github ? new Date(github.updated_at).toLocaleDateString() : 'Recent'}</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex flex-col gap-4">
                         <h4 class="text-white font-bold text-lg mb-4">Quick Links</h4>
+                        ${modrinth ? `
                         <a href="https://modrinth.com/plugin/${plugin.modrinthId}" target="_blank" class="flex items-center justify-between p-4 bg-[#1bd96a]/10 hover:bg-[#1bd96a]/20 border border-[#1bd96a]/20 rounded-xl transition-all group">
                             <div class="flex items-center gap-3">
                                 <i class="fas fa-download text-[#1bd96a]"></i>
@@ -258,6 +288,7 @@
                             </div>
                             <i class="fas fa-external-link-alt text-gray-600 group-hover:text-white transition-colors"></i>
                         </a>
+                        ` : ''}
                         <a href="https://github.com/SpyGamingOG/${plugin.githubRepo}" target="_blank" class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group">
                             <div class="flex items-center gap-3">
                                 <i class="fab fa-github text-white"></i>
